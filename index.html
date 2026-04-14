@@ -59,10 +59,10 @@
   <div id="screen-login" class="flex flex-col items-center justify-center min-h-screen p-4 z-10">
     <div class="text-center mb-10">
       <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange drop-shadow-md mb-2">Mamie Moule Maki</h1>
-      <p class="text-lg text-gray-400 font-semibold uppercase tracking-widest">Le Show Déchaîné</p>
+      <p class="text-base md:text-lg text-gray-400 font-semibold uppercase tracking-widest">Le Show Déchaîné</p>
     </div>
 
-    <div class="bg-darkCard/80 backdrop-blur-xl border border-white/10 p-8 rounded-3xl shadow-2xl w-full max-w-sm space-y-6">
+    <div class="bg-darkCard/80 backdrop-blur-xl border border-white/10 p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm space-y-6">
       <div class="space-y-2">
         <label class="text-gray-400 font-bold text-xs uppercase tracking-widest pl-1">Ton Identité</label>
         <input type="text" id="playerName" placeholder="Ex: Infinity..." class="w-full p-4 bg-black/40 border border-white/5 rounded-xl focus:border-neonRed focus:shadow-neon outline-none font-bold text-lg text-white transition-all">
@@ -76,29 +76,29 @@
         <div class="flex-grow border-t border-white/10"></div>
       </div>
       <div class="flex gap-3">
-        <input type="text" id="joinCode" placeholder="CODE" class="w-1/2 p-4 bg-black/40 border border-white/5 rounded-xl outline-none font-black uppercase text-center focus:border-neonOrange transition-all text-xl text-white">
-        <button id="btnJoin" class="w-1/2 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold rounded-xl transition-all duration-300 uppercase text-sm">
+        <input type="text" id="joinCode" placeholder="CODE" class="w-1/2 p-4 bg-black/40 border border-white/5 rounded-xl outline-none font-black uppercase text-center focus:border-neonOrange transition-all text-lg md:text-xl text-white">
+        <button id="btnJoin" class="w-1/2 bg-white/5 hover:bg-white/10 text-white border border-white/10 font-bold rounded-xl transition-all duration-300 uppercase text-xs md:text-sm">
           Rejoindre
         </button>
       </div>
     </div>
   </div>
 
-  <div id="screen-lobby" class="hidden flex flex-col items-center min-h-screen p-6">
-    <div class="w-full max-w-4xl flex justify-between items-center mb-8 mt-4">
-      <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange">Mamie Moule Maki</h1>
-      <div class="bg-darkCard border border-neonRed/30 px-6 py-2 rounded-lg shadow-neon">
-        <span class="text-gray-400 font-semibold mr-2 text-sm uppercase">Code Salon :</span>
-        <span id="displayCode" class="text-white font-black text-xl tracking-widest"></span>
+  <div id="screen-lobby" class="hidden flex flex-col items-center min-h-screen p-4 md:p-6">
+    <div class="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 mb-6 md:mb-8 mt-2 md:mt-4">
+      <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange text-center">Mamie Moule Maki</h1>
+      <div class="bg-darkCard border border-neonRed/30 px-6 py-2 rounded-lg shadow-neon flex items-center">
+        <span class="text-gray-400 font-semibold mr-2 text-xs md:text-sm uppercase">Code Salon :</span>
+        <span id="displayCode" class="text-white font-black text-lg md:text-xl tracking-widest"></span>
       </div>
     </div>
     
-    <div id="hostSettings" class="hidden w-full max-w-4xl bg-darkCard/50 border border-neonOrange/30 p-6 rounded-3xl mb-6">
-      <h3 class="font-black text-neonOrange text-sm uppercase tracking-widest mb-4">⚙️ Paramètres du Show</h3>
+    <div id="hostSettings" class="hidden w-full max-w-4xl bg-darkCard/50 border border-neonOrange/30 p-5 md:p-6 rounded-3xl mb-6">
+      <h3 class="font-black text-neonOrange text-xs md:text-sm uppercase tracking-widest mb-4">⚙️ Paramètres du Show</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Chrono</label>
-          <select id="settingTimer" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange">
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Chrono</label>
+          <select id="settingTimer" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
             <option value="sprint">Sprint (1er Fini)</option>
             <option value="45">45 Secondes</option>
             <option value="60" selected>60 Secondes</option>
@@ -107,8 +107,8 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Questions / Manche</label>
-          <select id="settingQuestions" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange">
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Questions / Manche</label>
+          <select id="settingQuestions" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
             <option value="3">3 Questions</option>
             <option value="4">4 Questions</option>
             <option value="5">5 Questions</option>
@@ -118,8 +118,8 @@
           </select>
         </div>
         <div>
-          <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Difficulté (Niveau)</label>
-          <select id="settingDiff" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange">
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Difficulté (Niveau)</label>
+          <select id="settingDiff" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
             <option value="all">Tout mélangé</option>
             <option value="soft" selected>Soft (Gentil)</option>
             <option value="moyen">Moyen (Classique)</option>
@@ -129,63 +129,63 @@
       </div>
     </div>
 
-    <div class="bg-darkCard/90 backdrop-blur-md border border-white/10 p-6 rounded-3xl w-full max-w-4xl mb-8 shadow-2xl">
-      <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
-        <h3 class="font-bold text-sm uppercase tracking-widest text-gray-400">Joueurs Connectés</h3>
+    <div class="bg-darkCard/90 backdrop-blur-md border border-white/10 p-5 md:p-6 rounded-3xl w-full max-w-4xl mb-8 shadow-2xl">
+      <div class="flex justify-between items-center mb-4 md:mb-6 border-b border-white/5 pb-4">
+        <h3 class="font-bold text-xs md:text-sm uppercase tracking-widest text-gray-400">Joueurs Connectés</h3>
         <span class="bg-neonRed/20 text-neonRed border border-neonRed/50 text-xs font-bold px-3 py-1 rounded-full"><span id="playerCount">0</span> Joueurs</span>
       </div>
-      <ul id="playersList" class="space-y-3 font-semibold text-lg grid grid-cols-1 md:grid-cols-2 gap-4"></ul>
+      <ul id="playersList" class="space-y-3 font-semibold text-base md:text-lg grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1"></ul>
     </div>
     
-    <button id="btnStart" class="hidden bg-gradient-to-r from-neonRed to-neonOrange text-white font-black py-4 px-12 rounded-xl shadow-neon hover:shadow-neon-strong transform hover:-translate-y-1 transition-all text-xl uppercase tracking-widest">
+    <button id="btnStart" class="hidden bg-gradient-to-r from-neonRed to-neonOrange text-white font-black py-4 px-10 md:px-12 rounded-xl shadow-neon hover:shadow-neon-strong transform hover:-translate-y-1 transition-all text-lg md:text-xl uppercase tracking-widest w-full md:w-auto">
       Démarrer la partie
     </button>
     <div id="waitMessage" class="flex flex-col items-center gap-4">
       <div class="w-8 h-8 border-4 border-neonRed/20 border-t-neonRed rounded-full animate-spin"></div>
-      <p class="text-sm font-bold text-gray-500 uppercase tracking-widest">En attente de l'Hôte...</p>
+      <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest text-center">En attente du chef...</p>
     </div>
   </div>
 
   <div id="screen-letter-draw" class="hidden flex flex-col items-center justify-center min-h-screen p-6">
     <div class="text-center mb-10">
-      <h2 class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-4 animate-pulse">Tirage en cours</h2>
-      <p id="waitLetterMessage" class="text-sm text-gray-400 font-bold uppercase tracking-widest hidden">En attente de l'Hôte...</p>
+      <h2 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-4 animate-pulse">Tirage en cours</h2>
+      <p id="waitLetterMessage" class="text-xs md:text-sm text-gray-400 font-bold uppercase tracking-widest hidden">En attente du chef...</p>
     </div>
-    <div class="w-48 h-48 rounded-full border-4 border-neonRed flex items-center justify-center bg-darkCard shadow-neon-strong mb-12">
-      <span id="rollingLetter" class="text-8xl font-black text-white">A</span>
+    <div class="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-neonRed flex items-center justify-center bg-darkCard shadow-neon-strong mb-12">
+      <span id="rollingLetter" class="text-6xl md:text-8xl font-black text-white">A</span>
     </div>
-    <button id="btnStopLetter" class="hidden bg-white text-neonRed border-2 border-neonRed font-black py-4 px-16 rounded-xl shadow-neon-strong transform hover:scale-105 transition-all text-2xl uppercase tracking-widest">
+    <button id="btnStopLetter" class="hidden bg-white text-neonRed border-2 border-neonRed font-black py-4 px-12 md:px-16 rounded-xl shadow-neon-strong transform hover:scale-105 transition-all text-xl md:text-2xl uppercase tracking-widest">
       Arrêter !
     </button>
   </div>
 
-  <div id="screen-game" class="hidden flex flex-col items-center min-h-screen p-4 md:p-8 pb-20">
-    <div class="w-full max-w-4xl flex justify-between items-center bg-[#13151a]/80 backdrop-blur-xl border border-white/5 p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] mb-10 relative overflow-hidden">
+  <div id="screen-game" class="hidden flex flex-col items-center min-h-screen p-3 md:p-8 pb-20">
+    <div class="w-full max-w-4xl flex justify-between items-center bg-[#13151a]/80 backdrop-blur-xl border border-white/5 p-4 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] mb-6 md:mb-10 relative overflow-hidden">
       <div class="absolute -top-24 -left-24 w-64 h-64 bg-neonRed/20 rounded-full blur-[80px] pointer-events-none"></div>
       <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-neonOrange/10 rounded-full blur-[80px] pointer-events-none"></div>
       
       <div class="text-center relative z-10">
-        <div class="text-xs text-neonRed font-black uppercase tracking-widest mb-2 opacity-80">La Lettre</div>
-        <div class="w-24 h-24 rounded-full border-2 border-neonRed/50 flex items-center justify-center bg-gradient-to-br from-neonRed/20 to-transparent shadow-[inset_0_0_20px_rgba(255,51,51,0.3),0_0_15px_rgba(255,51,51,0.2)]">
-          <span id="gameLetter" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 drop-shadow-md"></span>
+        <div class="text-[10px] md:text-xs text-neonRed font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80">La Lettre</div>
+        <div class="w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-neonRed/50 flex items-center justify-center bg-gradient-to-br from-neonRed/20 to-transparent shadow-[inset_0_0_20px_rgba(255,51,51,0.3),0_0_15px_rgba(255,51,51,0.2)]">
+          <span id="gameLetter" class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 drop-shadow-md"></span>
         </div>
       </div>
       
       <div class="hidden sm:block text-center relative z-10 px-4">
-        <h2 class="text-xl md:text-2xl font-black text-gray-200 tracking-widest uppercase">À vous de jouer !</h2>
-        <p class="text-sm font-bold text-gray-500 mt-1">Trouvez des mots originaux</p>
+        <h2 class="text-lg md:text-2xl font-black text-gray-200 tracking-widest uppercase">À vous de jouer !</h2>
+        <p class="text-xs md:text-sm font-bold text-gray-500 mt-1">Trouvez des mots originaux</p>
       </div>
 
       <div class="text-center relative z-10">
-        <div id="timerTitle" class="text-xs text-neonOrange font-black uppercase tracking-widest mb-2 opacity-80">Temps Restant</div>
-        <div class="flex items-baseline justify-center bg-black/60 px-8 py-4 rounded-2xl border border-white/5 shadow-[inset_0_2px_15px_rgba(0,0,0,0.8)]">
-          <span id="gameTimer" class="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 font-mono tracking-tighter transition-colors duration-300">60</span>
-          <span id="gameTimerSec" class="text-2xl font-bold text-gray-500 ml-1 font-mono">s</span>
+        <div id="timerTitle" class="text-[10px] md:text-xs text-neonOrange font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80">Temps Restant</div>
+        <div class="flex items-baseline justify-center bg-black/60 px-4 py-2 md:px-8 md:py-4 rounded-2xl border border-white/5 shadow-[inset_0_2px_15px_rgba(0,0,0,0.8)]">
+          <span id="gameTimer" class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 font-mono tracking-tighter transition-colors duration-300">60</span>
+          <span id="gameTimerSec" class="text-lg md:text-2xl font-bold text-gray-500 ml-1 font-mono">s</span>
         </div>
       </div>
     </div>
 
-    <div id="questionsContainer" class="w-full max-w-4xl space-y-5"></div>
+    <div id="questionsContainer" class="w-full max-w-4xl space-y-4 md:space-y-5"></div>
   </div>
 
   <div id="screen-validating" class="hidden flex-1 relative w-full h-full">
@@ -218,7 +218,6 @@
     let mergeState = null; 
     window.hasSubmitted = false; 
 
-    // --- ALPHABET MODIFIÉ : Retrait des lettres compliquées (K, W, X, Y, Z) ---
     const ALPHABET = "ABCDEFGHIJLMNOPQRSTUV".split("");
     
     const QUESTIONS_SOFT = [
@@ -299,7 +298,7 @@
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data.status !== "lobby") {
-          return alert("Cette partie a déjà commencé ! Attendez la fin");
+          return alert("Cette partie a déjà commencé ! Demande au chef de retourner au lobby.");
         }
         const isNameTaken = Object.values(data.players).some(p => p.name.toLowerCase() === myName.toLowerCase());
         if (isNameTaken) return alert("Ce pseudo est déjà pris dans ce salon !");
@@ -377,21 +376,23 @@
           showScreen('screen-lobby');
           document.getElementById('displayCode').innerText = currentGameId;
           const list = document.getElementById('playersList');
-          const playersKeys = Object.keys(data.players);
+          
+          // FIX DÉSYNCHRO : On trie toujours les clés pour garantir le même ordre chez tout le monde !
+          const playersKeys = Object.keys(data.players).sort();
           document.getElementById('playerCount').innerText = playersKeys.length;
           
           list.innerHTML = "";
           playersKeys.forEach((key) => {
             const isChef = data.hostId === key;
-            const kickBtn = (isHost && !isChef) ? `<button onclick="window.kickPlayer('${key}')" class="text-red-500 hover:text-red-400 bg-red-500/10 px-2 py-1 rounded ml-2 text-xs font-bold border border-red-500/30" title="Exclure">❌ Virer</button>` : '';
+            const kickBtn = (isHost && !isChef) ? `<button onclick="window.kickPlayer('${key}')" class="text-red-500 hover:text-red-400 bg-red-500/10 px-2 py-1 rounded ml-2 text-[10px] md:text-xs font-bold border border-red-500/30" title="Exclure">❌ Virer</button>` : '';
             
             list.innerHTML += `
-              <li class="p-4 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                   <span class="text-white font-bold">${data.players[key].name}</span>
+              <li class="p-3 md:p-4 bg-black/40 border border-white/5 rounded-xl flex items-center justify-between">
+                <div class="flex items-center gap-3 w-full overflow-hidden">
+                   <span class="text-white font-bold truncate">${data.players[key].name}</span>
                 </div>
-                <div class="flex items-center">
-                  ${isChef ? '<span class="text-neonOrange text-xs font-black uppercase tracking-widest border border-neonOrange px-2 py-1 rounded">Hôte</span>' : ''}
+                <div class="flex items-center flex-shrink-0">
+                  ${isChef ? '<span class="text-neonOrange text-[10px] md:text-xs font-black uppercase tracking-widest border border-neonOrange px-2 py-1 rounded">Chef</span>' : ''}
                   ${kickBtn}
                 </div>
               </li>`;
@@ -463,9 +464,9 @@
              showScreen('screen-validating');
              if (document.getElementById('screen-validating').innerHTML === "") {
                document.getElementById('screen-validating').innerHTML = `
-                <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]">
-                  <div class="w-16 h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
-                  <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
+                <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f] px-4 text-center">
+                  <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
+                  <h2 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
                 </div>`;
              }
              return; 
@@ -479,21 +480,21 @@
           if (container.children.length === 0) {
             data.questions.forEach((q, index) => {
               container.innerHTML += `
-                <div class="group relative bg-[#15181e] border border-white/5 p-5 md:p-6 rounded-2xl transition-all duration-300 focus-within:border-neonOrange/50 focus-within:shadow-[0_0_30px_rgba(255,136,0,0.1)] hover:-translate-y-1 hover:shadow-xl">
-                  <label class="flex items-center gap-3 px-1 pb-4 cursor-pointer" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="flex items-center justify-center w-7 h-7 rounded-lg bg-white/10 text-white/80 text-xs font-black border border-white/5">${index+1}</span>
-                    <span class="text-gray-300 font-bold text-sm md:text-base uppercase tracking-widest">${q}</span>
+                <div class="group relative bg-[#15181e] border border-white/5 p-4 md:p-6 rounded-2xl transition-all duration-300 focus-within:border-neonOrange/50 focus-within:shadow-[0_0_30px_rgba(255,136,0,0.1)] hover:-translate-y-1 hover:shadow-xl">
+                  <label class="flex items-center gap-3 px-1 pb-3 cursor-pointer" onclick="document.getElementById('answer-${index}').focus()">
+                    <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white/10 text-white/80 text-[10px] md:text-xs font-black border border-white/5 flex-shrink-0">${index+1}</span>
+                    <span class="text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest leading-snug">${q}</span>
                   </label>
-                  <div class="flex items-center bg-[#0a0c0f] px-5 py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black text-xl md:text-2xl select-none">${data.currentLetter}</span>
-                    <input type="text" id="answer-${index}" autocomplete="off" class="w-full bg-transparent text-white outline-none font-black text-xl md:text-2xl tracking-wide placeholder-gray-800" placeholder="tape la suite...">
+                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 md:py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black text-lg md:text-2xl select-none lowercase">${data.currentLetter}</span>
+                    <input type="text" id="answer-${index}" autocomplete="off" class="w-full bg-transparent text-white outline-none font-black text-lg md:text-2xl tracking-wide placeholder-gray-800" placeholder="ape la suite...">
                   </div>
                 </div>
               `;
             });
             
             if (data.settings.timer === 'sprint') {
-              container.innerHTML += `<button id="btnSprint" onclick="window.endSprint()" disabled class="w-full mt-8 bg-gradient-to-r from-neonRed to-neonOrange text-white font-black py-5 rounded-2xl hover:shadow-neon-strong transform transition-all text-2xl uppercase tracking-widest shadow-lg disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none">J'ai Fini ! 🛑</button>`;
+              container.innerHTML += `<button id="btnSprint" onclick="window.endSprint()" disabled class="w-full mt-6 bg-gradient-to-r from-neonRed to-neonOrange text-white font-black py-4 md:py-5 rounded-2xl hover:shadow-neon-strong transform transition-all text-xl md:text-2xl uppercase tracking-widest shadow-lg disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none">J'ai Fini ! 🛑</button>`;
             }
 
             setTimeout(() => {
@@ -528,11 +529,11 @@
              timerEl.innerText = "SPRINT";
              timerSec.innerText = "!";
              timerEl.parentElement.classList.remove('timer-alert');
-             timerEl.className = "text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange tracking-widest";
+             timerEl.className = "text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange tracking-widest";
           } else {
              timerTitle.innerText = "Temps Restant";
              timerSec.innerText = "s";
-             timerEl.className = "text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 font-mono tracking-tighter transition-colors duration-300";
+             timerEl.className = "text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300 font-mono tracking-tighter transition-colors duration-300";
              
              if (!timerInterval) {
               timerInterval = setInterval(() => {
@@ -584,9 +585,9 @@
 
       showScreen('screen-validating');
       document.getElementById('screen-validating').innerHTML = `
-        <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]">
-          <div class="w-16 h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
-          <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
+        <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f] px-4 text-center">
+          <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
+          <h2 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
         </div>`;
 
       const myAnswers = [];
@@ -622,7 +623,8 @@
       if(!flow) return; 
 
       const container = document.getElementById('screen-validating');
-      const playersKeys = Object.keys(data.players);
+      // FIX DÉSYNCHRO : On trie toujours les joueurs par ordre alphabétique de leurs identifiants
+      const playersKeys = Object.keys(data.players).sort();
       
       let html = '';
       let hostControls = '';
@@ -630,65 +632,80 @@
       if (isHost) {
         const canGoBack = !(flow.step === 'splash' || (flow.step === 'intro' && flow.qIndex === 0));
 
-        if (canGoBack) {
-          hostControls += `<button onclick="window.prevFlow()" class="fixed bottom-8 left-8 z-50 bg-[#1a1d24] text-white border border-white/10 font-black py-4 px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:bg-[#222630] transform hover:scale-105 transition-all text-xl uppercase tracking-widest shadow-lg">⬅️ Retour</button>`;
-        }
-        
-        if (['splash', 'intro', 'summary'].includes(flow.step)) {
-          hostControls += `<button onclick="window.nextFlow()" class="fixed bottom-8 right-8 z-50 bg-white text-darkBg font-black py-4 px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-xl uppercase tracking-widest shadow-neon-strong">Suivant ➔</button>`;
+        // Panneau de contrôle du chef
+        if (['splash', 'intro', 'summary'].includes(flow.step) || canGoBack) {
+           hostControls += `<div class="fixed bottom-4 md:bottom-8 left-0 w-full px-4 md:px-8 z-50 flex justify-between pointer-events-none">`;
+           
+           if (canGoBack) {
+             hostControls += `<button onclick="window.prevFlow()" class="pointer-events-auto bg-[#1a1d24] text-white border border-white/10 font-black py-3 px-5 md:py-4 md:px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:bg-[#222630] transform hover:scale-105 transition-all text-sm md:text-xl uppercase tracking-widest shadow-lg">⬅️ Retour</button>`;
+           } else {
+             hostControls += `<div></div>`; // Spacer
+           }
+
+           if (['splash', 'intro', 'summary'].includes(flow.step)) {
+             hostControls += `<button onclick="window.nextFlow()" class="pointer-events-auto bg-white text-darkBg font-black py-3 px-5 md:py-4 md:px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-sm md:text-xl uppercase tracking-widest shadow-neon-strong">Suivant ➔</button>`;
+           }
+
+           hostControls += `</div>`;
         }
       } else {
-        hostControls += `<div class="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-neonOrange border border-neonOrange/30 font-black py-3 px-8 rounded-full shadow-[0_0_20px_rgba(255,136,0,0.3)] animate-pulse flex items-center gap-3 whitespace-nowrap"><div class="w-4 h-4 border-2 border-neonOrange border-t-transparent rounded-full animate-spin"></div> En attente de l'Hôte...</div>`;
+        hostControls += `<div class="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-neonOrange border border-neonOrange/30 font-black py-2 px-6 md:py-3 md:px-8 rounded-full shadow-[0_0_20px_rgba(255,136,0,0.3)] animate-pulse flex items-center gap-3 whitespace-nowrap text-xs md:text-base"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-neonOrange border-t-transparent rounded-full animate-spin"></div> En attente du chef...</div>`;
       }
 
       if (flow.step === 'splash') {
         html = `
-          <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]">
-            <h1 class="text-7xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-[0_0_50px_rgba(255,51,51,0.6)]">RÉSULTATS</h1>
-            <p class="text-2xl text-gray-400 mt-8 font-bold uppercase tracking-widest animate-slide-up opacity-0" style="animation-delay: 0.2s;">L'heure de vérité</p>
+          <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f] px-4 text-center">
+            <h1 class="text-5xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-[0_0_50px_rgba(255,51,51,0.6)]">RÉSULTATS</h1>
+            <p class="text-lg md:text-2xl text-gray-400 mt-6 md:mt-8 font-bold uppercase tracking-widest animate-slide-up opacity-0" style="animation-delay: 0.2s;">L'heure de vérité</p>
           </div>`;
       } 
       else if (flow.step === 'intro') {
         const qText = data.questions[flow.qIndex];
         html = `
-          <div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-            <span class="text-neonRed font-bold text-2xl uppercase tracking-widest mb-6 animate-slide-up opacity-0 shadow-neon bg-neonRed/10 px-6 py-2 rounded-xl border border-neonRed/30">Question ${flow.qIndex + 1}</span>
-            <h2 class="text-5xl md:text-7xl font-black text-white text-center leading-tight animate-slide-up opacity-0 drop-shadow-2xl" style="animation-delay: 0.3s;">${qText}</h2>
+          <div class="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center">
+            <span class="text-neonRed font-bold text-lg md:text-2xl uppercase tracking-widest mb-4 md:mb-6 animate-slide-up opacity-0 shadow-neon bg-neonRed/10 px-4 py-1 md:px-6 md:py-2 rounded-xl border border-neonRed/30">Question ${flow.qIndex + 1}</span>
+            <h2 class="text-3xl md:text-5xl lg:text-7xl font-black text-white leading-tight animate-slide-up opacity-0 drop-shadow-2xl" style="animation-delay: 0.3s;">${qText}</h2>
           </div>`;
       }
       else if (flow.step === 'reveal') {
          const qText = data.questions[flow.qIndex];
          const pId = playersKeys[flow.pIndex];
+         
+         // Sécurité en cas de désynchro très courte
+         if(!pId || !data.players[pId]) return;
+
          const pName = data.players[pId].name;
          const ansObj = data.players[pId].answers?.[flow.qIndex] || { text: "", valid: true };
          const hasAnswer = ansObj.text.trim() !== "";
          
          const displayAns = hasAnswer 
-           ? `<span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black">${data.currentLetter}</span>${ansObj.text}` 
-           : `<span class="italic text-gray-600 text-5xl">Pas de réponse...</span>`;
+           ? `<span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black lowercase">${data.currentLetter}</span><span class="break-words">${ansObj.text}</span>` 
+           : `<span class="italic text-gray-600 text-3xl md:text-5xl">Pas de réponse...</span>`;
 
          let controls = '';
          if (isHost) {
            if (hasAnswer) {
              controls = `
-               <div class="flex gap-6 mt-16 animate-slide-up opacity-0" style="animation-delay: 0.5s;">
-                 <button onclick="window.validateAnswer('${pId}', true)" class="bg-green-500/20 text-green-400 border-2 border-green-500/50 hover:bg-green-500/40 hover:scale-105 font-black py-5 px-12 rounded-2xl text-3xl uppercase transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)]">Bon ✅</button>
-                 <button onclick="window.validateAnswer('${pId}', false)" class="bg-red-500/20 text-red-400 border-2 border-red-500/50 hover:bg-red-500/40 hover:scale-105 font-black py-5 px-12 rounded-2xl text-3xl uppercase transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)]">Mauvais ❌</button>
+               <div class="flex gap-4 md:gap-6 mt-10 md:mt-16 animate-slide-up opacity-0 flex-wrap justify-center" style="animation-delay: 0.5s;">
+                 <button onclick="window.validateAnswer('${pId}', true)" class="bg-green-500/20 text-green-400 border-2 border-green-500/50 hover:bg-green-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)]">Bon ✅</button>
+                 <button onclick="window.validateAnswer('${pId}', false)" class="bg-red-500/20 text-red-400 border-2 border-red-500/50 hover:bg-red-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)]">Mauvais ❌</button>
                </div>`;
            } else {
-             controls = `<button onclick="window.nextFlow()" class="mt-16 bg-white/10 text-white font-bold py-4 px-12 rounded-2xl border border-white/20 hover:bg-white/20 animate-slide-up uppercase tracking-widest text-xl">Continuer ➔</button>`;
+             controls = `<button onclick="window.nextFlow()" class="mt-10 md:mt-16 bg-white/10 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-2xl border border-white/20 hover:bg-white/20 animate-slide-up uppercase tracking-widest text-base md:text-xl">Continuer ➔</button>`;
            }
+           
+           controls += `<div class="mt-6 md:mt-10 animate-slide-up opacity-0" style="animation-delay: 0.6s;"><button onclick="window.prevFlow()" class="text-gray-500 hover:text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest flex items-center gap-2 px-4 py-2"><span class="text-lg leading-none mb-1">⬅</span> Retour au précédent</button></div>`;
          }
 
          html = `
           <div class="absolute inset-0 flex flex-col">
-            <div class="w-full text-center py-8 border-b border-white/10 bg-darkCard/80 backdrop-blur-xl shadow-lg">
-              <span class="text-neonRed font-bold text-sm uppercase tracking-widest">Question ${flow.qIndex + 1}</span>
-              <h3 class="text-3xl md:text-4xl font-black text-white mt-2">${qText}</h3>
+            <div class="w-full text-center py-4 md:py-8 px-4 border-b border-white/10 bg-darkCard/80 backdrop-blur-xl shadow-lg">
+              <span class="text-neonRed font-bold text-[10px] md:text-sm uppercase tracking-widest">Question ${flow.qIndex + 1}</span>
+              <h3 class="text-xl md:text-3xl lg:text-4xl font-black text-white mt-1 md:mt-2 truncate">${qText}</h3>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center p-6">
-              <h4 class="text-3xl font-bold text-gray-500 mb-8 uppercase tracking-widest animate-slide-up opacity-0">${pName} a écrit :</h4>
-              <div class="text-6xl md:text-9xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-zoom-in opacity-0 flex items-center justify-center" style="animation-delay: 0.2s;">
+            <div class="flex-1 flex flex-col items-center justify-center p-4 md:p-6 text-center overflow-y-auto pb-32">
+              <h4 class="text-xl md:text-3xl font-bold text-gray-500 mb-6 md:mb-8 uppercase tracking-widest animate-slide-up opacity-0">${pName} a écrit :</h4>
+              <div class="text-4xl md:text-7xl lg:text-9xl font-black text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.2)] animate-zoom-in opacity-0 flex flex-wrap items-center justify-center break-all px-2 w-full leading-tight" style="animation-delay: 0.2s;">
                 ${displayAns}
               </div>
               ${controls}
@@ -728,44 +745,44 @@
 
           const strike = (!ansObj.valid && ansObj.text) ? "line-through text-red-400" : (ansObj.text ? "text-white" : "");
           const displayAns = ansObj.text 
-            ? `<span class="text-neonRed font-black">${data.currentLetter}</span><span class="${strike}">${ansObj.text}</span>` 
-            : '<span class="italic text-gray-600">Vide</span>';
+            ? `<span class="text-neonRed font-black lowercase">${data.currentLetter}</span><span class="${strike} break-words">${ansObj.text}</span>` 
+            : '<span class="italic text-gray-600 text-sm md:text-base">Vide</span>';
 
           let controls = "";
           if (isHost && ansObj.valid && ansObj.text !== "") {
             if (isMerging) {
               if (mergeState === pId) {
                 rowClasses = "merge-active";
-                controls = `<button onclick="window.cancelMerge()" class="px-4 py-2 bg-red-500/20 text-red-400 font-bold rounded-lg border border-red-500/50">Annuler</button>`;
+                controls = `<button onclick="window.cancelMerge()" class="px-3 py-1 md:px-4 md:py-2 bg-red-500/20 text-red-400 font-bold rounded-lg border border-red-500/50 text-xs md:text-sm">Annuler</button>`;
               } else {
-                controls = `<button onclick="window.executeMerge('${mergeState}', '${pId}')" class="px-4 py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 shadow-neon-blue animate-pulse">Lier ici 👈</button>`;
+                controls = `<button onclick="window.executeMerge('${mergeState}', '${pId}')" class="px-3 py-1 md:px-4 md:py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 shadow-neon-blue animate-pulse text-xs md:text-sm">Lier ici 👈</button>`;
               }
             } else {
-              controls = `<button onclick="window.startMerge('${pId}')" class="w-10 h-10 flex items-center justify-center bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-xl text-lg hover:bg-blue-500/40" title="Fusionner">🔗</button>`;
+              controls = `<button onclick="window.startMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-xl text-base md:text-lg hover:bg-blue-500/40" title="Fusionner">🔗</button>`;
             }
           }
 
           listHtml += `
-            <div class="flex items-center justify-between p-4 rounded-2xl border transition-all ${rowClasses}">
-               <div class="flex flex-col">
-                 <span class="font-bold text-gray-500 text-xs uppercase tracking-widest">${player.name}</span>
-                 <span class="text-2xl font-bold ${strike ? '' : 'text-white'}">${displayAns}</span>
+            <div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border transition-all gap-3 md:gap-0 ${rowClasses}">
+               <div class="flex flex-col w-full md:w-2/3">
+                 <span class="font-bold text-gray-500 text-[10px] md:text-xs uppercase tracking-widest">${player.name}</span>
+                 <span class="text-lg md:text-2xl font-bold leading-snug ${strike ? '' : 'text-white'}">${displayAns}</span>
                </div>
-               <div class="flex items-center gap-4">
-                 ${!isMerging && ansObj.valid && ansObj.text ? `<span class="flex items-center justify-center w-10 h-10 rounded-xl border-2 font-black text-lg ${scoreBadge}">+${score}</span>` : ''}
+               <div class="flex items-center gap-3 self-end md:self-auto">
+                 ${!isMerging && ansObj.valid && ansObj.text ? `<span class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-xl border-2 font-black text-sm md:text-lg ${scoreBadge}">+${score}</span>` : ''}
                  ${controls}
                </div>
              </div>`;
         });
 
         html = `
-          <div class="absolute inset-0 flex flex-col p-4 md:p-10 overflow-y-auto pb-32">
-            <div class="w-full max-w-4xl mx-auto mt-16">
-              <div class="text-center mb-8">
-                <span class="text-neonRed font-bold text-sm uppercase tracking-widest">Bilan Question ${flow.qIndex + 1}</span>
-                <h3 class="text-3xl font-black text-white mt-2">${qText} ${isMerging ? '<span class="text-neonBlue animate-pulse block text-lg mt-2">Mode Fusion Activé...</span>' : ''}</h3>
+          <div class="absolute inset-0 flex flex-col p-4 md:p-10 overflow-y-auto pb-32 md:pb-40">
+            <div class="w-full max-w-4xl mx-auto mt-4 md:mt-16">
+              <div class="text-center mb-6 md:mb-8">
+                <span class="text-neonRed font-bold text-xs md:text-sm uppercase tracking-widest">Bilan Question ${flow.qIndex + 1}</span>
+                <h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-2 px-2">${qText} ${isMerging ? '<span class="text-neonBlue animate-pulse block text-sm md:text-lg mt-2">Mode Fusion Activé...</span>' : ''}</h3>
               </div>
-              <div class="space-y-3 bg-darkCard/80 backdrop-blur-md p-6 rounded-3xl border border-white/10 shadow-2xl">
+              <div class="space-y-3 bg-darkCard/80 backdrop-blur-md p-4 md:p-6 rounded-3xl border border-white/10 shadow-2xl">
                 ${listHtml}
               </div>
             </div>
@@ -792,28 +809,37 @@
           });
         });
 
+        // FIX ÉGALITÉS : On trie puis on assigne un rang intelligent
         const sorted = playersKeys.sort((a,b) => scores[b] - scores[a]);
         
         let lbHtml = '';
+        let currentRank = 1;
+        let previousScore = -1;
+
         sorted.forEach((pId, idx) => {
-          const isFirst = idx === 0;
+          if (scores[pId] !== previousScore) {
+            currentRank = idx + 1;
+            previousScore = scores[pId];
+          }
+          const isFirst = currentRank === 1;
+
           lbHtml += `
-            <div class="flex items-center justify-between p-5 bg-[#0a0c0f] rounded-2xl border ${isFirst ? 'border-neonOrange/50 shadow-neon' : 'border-white/5'}">
-              <div class="flex items-center gap-4">
-                <span class="text-3xl font-black ${isFirst ? 'text-neonOrange' : 'text-gray-600'}">#${idx+1}</span>
-                <span class="text-2xl font-bold text-white">${data.players[pId].name}</span>
+            <div class="flex items-center justify-between p-4 md:p-5 bg-[#0a0c0f] rounded-2xl border ${isFirst ? 'border-neonOrange/50 shadow-neon' : 'border-white/5'}">
+              <div class="flex items-center gap-3 md:gap-4 truncate">
+                <span class="text-2xl md:text-3xl font-black ${isFirst ? 'text-neonOrange' : 'text-gray-600'}">#${currentRank}</span>
+                <span class="text-lg md:text-2xl font-bold text-white truncate">${data.players[pId].name}</span>
               </div>
-              <span class="text-3xl font-black text-neonGreen">${scores[pId]} pts</span>
+              <span class="text-xl md:text-3xl font-black text-neonGreen whitespace-nowrap ml-2">${scores[pId]} pts</span>
             </div>`;
         });
 
         html = `
-          <div class="absolute inset-0 flex flex-col items-center p-6 overflow-y-auto pb-32">
-            <h2 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-10 mt-10 text-center drop-shadow-md">CLASSEMENT FINAL</h2>
-            <div class="w-full max-w-2xl space-y-4 bg-darkCard/80 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-2xl">
+          <div class="absolute inset-0 flex flex-col items-center p-4 md:p-6 overflow-y-auto pb-32">
+            <h2 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-8 md:mb-10 mt-8 md:mt-10 text-center drop-shadow-md">CLASSEMENT FINAL</h2>
+            <div class="w-full max-w-2xl space-y-3 md:space-y-4 bg-darkCard/80 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/10 shadow-2xl">
               ${lbHtml}
             </div>
-            ${isHost ? `<button onclick="window.startNewRound()" class="mt-12 bg-white text-darkBg font-black py-5 px-16 rounded-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-2xl uppercase tracking-widest shadow-neon-strong mb-10">Nouvelle Manche</button>` : ''}
+            ${isHost ? `<button onclick="window.startNewRound()" class="mt-10 md:mt-12 bg-white text-darkBg font-black py-4 px-12 md:py-5 md:px-16 rounded-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-xl md:text-2xl uppercase tracking-widest shadow-neon-strong mb-10">Nouvelle Manche</button>` : ''}
           </div>`;
       }
 
@@ -831,7 +857,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players);
+      const playersKeys = Object.keys(data.players).sort(); // TRÈS IMPORTANT LE SORT() ICI
 
       if (step === 'splash') step = 'intro';
       else if (step === 'intro') step = 'reveal';
@@ -851,7 +877,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players);
+      const playersKeys = Object.keys(data.players).sort(); // ET ICI
 
       if (step === 'leaderboard') { step = 'summary'; qIndex = data.questions.length - 1; }
       else if (step === 'summary') { step = 'reveal'; pIndex = playersKeys.length - 1; }
@@ -873,7 +899,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players);
+      const playersKeys = Object.keys(data.players).sort(); // ET ICI
 
       const answers = [...data.players[pId].answers];
       answers[qIndex].valid = isValid;
