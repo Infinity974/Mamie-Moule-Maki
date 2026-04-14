@@ -58,7 +58,7 @@
 </head>
 <body class="font-sans min-h-screen selection:bg-neonRed selection:text-white relative overflow-x-hidden flex flex-col">
 
-  <div class="hidden text-neonRed text-neonGreen text-neonOrange text-neonBlue text-red-400 text-green-400 text-gray-600 text-gray-700 text-gray-300 text-orange-700 text-orange-950 bg-neonGreen/20 bg-neonGreen/5 bg-neonOrange/20 bg-neonOrange/5 bg-red-500/5 bg-red-500/20 bg-green-500/20 bg-neonBlue/20 bg-gray-400 bg-orange-800 bg-gradient-to-t from-neonOrange to-yellow-500 border-neonGreen/50 border-neonGreen/40 border-neonOrange/50 border-neonOrange/40 border-red-500/30 border-red-500/50 border-green-500/50 border-neonBlue/50 shadow-neon shadow-neon-strong shadow-neon-green shadow-neon-blue shadow-[0_0_15px_rgba(255,136,0,0.5)] shadow-[inset_0_0_20px_rgba(0,0,0,0.3)] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] shadow-[0_0_30px_rgba(255,255,255,0.8)] shadow-[0_0_30px_rgba(255,255,255,0.2)] shadow-[0_0_20px_rgba(255,136,0,0.3)] drop-shadow-[0_0_10px_rgba(255,51,51,0.8)] drop-shadow-[0_0_30px_rgba(0,255,170,0.8)] drop-shadow-[0_0_20px_rgba(255,51,51,0.5)] opacity-50 opacity-60 scale-125 line-through disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none w-full w-1/2 w-1/3"></div>
+  <div class="hidden text-neonRed drop-shadow-[0_0_10px_rgba(255,51,51,0.8)] bg-gradient-to-r from-neonRed to-neonOrange text-transparent bg-clip-text bg-neonGreen/20 text-neonGreen border-neonGreen/50 shadow-neon-green border-neonGreen/40 bg-neonGreen/5 bg-neonOrange/20 text-neonOrange border-neonOrange/50 shadow-[0_0_15px_rgba(255,136,0,0.5)] border-neonOrange/40 bg-neonOrange/5 border-red-500/30 bg-red-500/5 line-through text-red-400 bg-green-500/20 text-green-400 border-green-500/50 bg-red-500/20 text-red-400 border-red-500/50 opacity-50 opacity-60 scale-125 drop-shadow-[0_0_30px_rgba(0,255,170,0.8)] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none w-full w-1/2 w-1/3 bg-gray-500/20 text-gray-400 border-gray-500/50 border-gray-500/30 bg-gray-500/5 opacity-80 shadow-[0_0_10px_rgba(156,163,175,0.3)] ring-4 ring-white/50 brightness-150 scale-110"></div>
 
   <div id="screen-login" class="flex flex-col items-center justify-center min-h-screen p-4 z-10">
     <div class="text-center mb-10">
@@ -181,7 +181,7 @@
       <div class="text-center relative z-10">
         <div class="text-[10px] md:text-xs text-neonRed font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80">La Lettre</div>
         <div class="w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-neonRed/50 flex items-center justify-center bg-gradient-to-br from-neonRed/20 to-transparent shadow-[inset_0_0_20px_rgba(255,51,51,0.3),0_0_15px_rgba(255,51,51,0.2)]">
-          <span id="gameLetter" class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 drop-shadow-md"></span>
+          <span id="gameLetter" class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-gray-400 drop-shadow-md uppercase"></span>
         </div>
       </div>
       
@@ -264,6 +264,15 @@
       return word.trim().toLowerCase().replace(/\s+/g, ' ');
     };
 
+    // --- FONCTION DE TRI DES JOUEURS (Chef en premier, puis ordre d'arrivée) ---
+    const getOrderedPlayers = (data) => {
+      return Object.keys(data.players).sort((a, b) => {
+        if (data.hostId === a) return -1;
+        if (data.hostId === b) return 1;
+        return (data.players[a].joinedAt || 0) - (data.players[b].joinedAt || 0);
+      });
+    };
+
     window.addEventListener('beforeunload', () => {
       if (currentGameId && myPlayerId) {
         updateDoc(doc(db, "games", currentGameId), {
@@ -298,7 +307,7 @@
         hostId: myPlayerId,
         settings: { timer: 60, questionsCount: 6, diff: 'soft', roundsCount: 3 }, 
         currentRound: 1,
-        players: { [myPlayerId]: { name: myName, answers: [], score: 0 } }
+        players: { [myPlayerId]: { name: myName, answers: [], score: 0, joinedAt: Date.now() } }
       });
       listenToGame();
     });
@@ -319,7 +328,7 @@
         if (isNameTaken) return alert("Ce pseudo est déjà pris dans ce salon !");
 
         currentGameId = code;
-        await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [], score: 0 } });
+        await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [], score: 0, joinedAt: Date.now() } });
         listenToGame();
       } else {
         alert("Salon introuvable !");
@@ -401,7 +410,8 @@
           showScreen('screen-lobby');
           document.getElementById('displayCode').innerText = currentGameId;
           const list = document.getElementById('playersList');
-          const playersKeys = Object.keys(data.players).sort();
+          
+          const playersKeys = getOrderedPlayers(data); // Utilise la fonction pour que le chef soit en premier
           document.getElementById('playerCount').innerText = playersKeys.length;
           
           list.innerHTML = "";
@@ -494,7 +504,7 @@
              if (document.getElementById('screen-validating').innerHTML === "") {
                document.getElementById('screen-validating').innerHTML = `
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f] px-4 text-center">
-                  <div class="w-12 h-12 md:w-16 h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
+                  <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
                   <h2 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
                 </div>`;
              }
@@ -511,11 +521,11 @@
               container.innerHTML += `
                 <div class="group relative bg-[#15181e] border border-white/5 p-4 md:p-6 rounded-2xl transition-all duration-300 focus-within:border-neonOrange/50 focus-within:shadow-[0_0_30px_rgba(255,136,0,0.1)] hover:-translate-y-1 hover:shadow-xl">
                   <label class="flex items-center gap-3 px-1 pb-3 cursor-pointer" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="flex items-center justify-center w-6 h-6 md:w-7 h-7 rounded-lg bg-white/10 text-white/80 text-[10px] md:text-xs font-black border border-white/5 flex-shrink-0">${index+1}</span>
+                    <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white/10 text-white/80 text-[10px] md:text-xs font-black border border-white/5 flex-shrink-0">${index+1}</span>
                     <span class="text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest leading-snug">${q}</span>
                   </label>
-                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black text-lg md:text-2xl select-none lowercase">${data.currentLetter}</span>
+                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 md:py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black text-lg md:text-2xl select-none uppercase">${data.currentLetter}</span>
                     <input type="text" id="answer-${index}" autocomplete="off" class="w-full bg-transparent text-white outline-none font-black text-lg md:text-2xl tracking-wide placeholder-gray-800" placeholder="ape la suite...">
                   </div>
                 </div>
@@ -652,7 +662,7 @@
       if(!flow) return; 
 
       const container = document.getElementById('screen-validating');
-      const playersKeys = Object.keys(data.players).sort();
+      const playersKeys = getOrderedPlayers(data); // Ordre régulier pour les révélations
       const isFinalRound = data.currentRound >= data.settings.roundsCount;
       
       let html = '';
@@ -713,16 +723,17 @@
          const hasAnswer = ansObj.text.trim() !== "";
          
          const displayAns = hasAnswer 
-           ? `<span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black lowercase">${data.currentLetter}</span><span class="break-words">${ansObj.text}</span>` 
+           ? `<span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black uppercase">${data.currentLetter}</span><span class="break-words">${ansObj.text}</span>` 
            : `<span class="italic text-gray-600 text-3xl md:text-5xl">Pas de réponse...</span>`;
 
          let controls = '';
          if (isHost) {
            if (hasAnswer) {
+             // Ajout de "event" dans l'appel onClick pour gérer l'animation
              controls = `
                <div class="flex gap-4 md:gap-6 mt-10 md:mt-16 animate-slide-up opacity-0 flex-wrap justify-center" style="animation-delay: 0.5s;">
-                 <button onclick="window.validateAnswer('${pId}', true)" class="bg-green-500/20 text-green-400 border-2 border-green-500/50 hover:bg-green-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)]">Bon ✅</button>
-                 <button onclick="window.validateAnswer('${pId}', false)" class="bg-red-500/20 text-red-400 border-2 border-red-500/50 hover:bg-red-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)]">Mauvais ❌</button>
+                 <button onclick="window.validateAnswer(event, '${pId}', true)" class="bg-green-500/20 text-green-400 border-2 border-green-500/50 hover:bg-green-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)]">Bon ✅</button>
+                 <button onclick="window.validateAnswer(event, '${pId}', false)" class="bg-red-500/20 text-red-400 border-2 border-red-500/50 hover:bg-red-500/40 hover:scale-105 font-black py-3 px-6 md:py-5 md:px-12 rounded-2xl text-xl md:text-3xl uppercase transition-all shadow-[0_0_30px_rgba(239,68,68,0.3)]">Mauvais ❌</button>
                </div>`;
            } else {
              controls = `<button onclick="window.nextFlow()" class="mt-10 md:mt-16 bg-white/10 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-2xl border border-white/20 hover:bg-white/20 animate-slide-up uppercase tracking-widest text-base md:text-xl">Continuer ➔</button>`;
@@ -748,6 +759,7 @@
         const qText = data.questions[flow.qIndex];
         const isMerging = mergeState !== null;
         
+        // --- LOGIQUE PETIT BAC ---
         const wordFrequencies = {};
         playersKeys.forEach(pId => {
           const ans = data.players[pId].answers?.[flow.qIndex] || {text:"", valid:false};
@@ -768,8 +780,20 @@
           if (ansObj.text !== "") {
             if (ansObj.valid) {
               const freq = wordFrequencies[normAns];
-              if (freq === 1) { score = 2; scoreBadge = "bg-neonGreen/20 text-neonGreen border-neonGreen/50 shadow-neon-green"; rowClasses = "border-neonGreen/40 bg-neonGreen/5"; } 
-              else if (freq > 1) { score = 1; scoreBadge = "bg-neonOrange/20 text-neonOrange border-neonOrange/50 shadow-[0_0_15px_rgba(255,136,0,0.5)]"; rowClasses = "border-neonOrange/40 bg-neonOrange/5"; }
+              if (freq === 1) { 
+                 score = 2; 
+                 scoreBadge = "bg-neonGreen/20 text-neonGreen border-neonGreen/50 shadow-neon-green"; 
+                 rowClasses = "border-neonGreen/40 bg-neonGreen/5"; 
+              } else if (freq === 2) { 
+                 score = 1; 
+                 scoreBadge = "bg-neonOrange/20 text-neonOrange border-neonOrange/50 shadow-[0_0_15px_rgba(255,136,0,0.5)]"; 
+                 rowClasses = "border-neonOrange/40 bg-neonOrange/5"; 
+              } else {
+                 // 3 personnes ou plus = 0 points
+                 score = 0; 
+                 scoreBadge = "bg-gray-500/20 text-gray-400 border-gray-500/50 shadow-[0_0_10px_rgba(156,163,175,0.3)]"; 
+                 rowClasses = "border-gray-500/30 bg-gray-500/5 opacity-80"; 
+              }
             } else {
               rowClasses = "border-red-500/30 bg-red-500/5 opacity-60"; 
             }
@@ -777,7 +801,7 @@
 
           const strike = (!ansObj.valid && ansObj.text) ? "line-through text-red-400" : (ansObj.text ? "text-white" : "");
           const displayAns = ansObj.text 
-            ? `<span class="text-neonRed font-black lowercase">${data.currentLetter}</span><span class="${strike} break-words">${ansObj.text}</span>` 
+            ? `<span class="text-neonRed font-black uppercase">${data.currentLetter}</span><span class="${strike} break-words">${ansObj.text}</span>` 
             : '<span class="italic text-gray-600 text-sm md:text-base">Vide</span>';
 
           let controls = "";
@@ -788,9 +812,9 @@
             if (isMerging) {
               if (mergeState === pId) {
                 rowClasses = "merge-active";
-                controls = `<button onclick="window.cancelMerge()" class="px-3 py-1 md:px-4 md:py-2 bg-red-500/20 text-red-400 font-bold rounded-lg border border-red-500/50 text-xs md:text-sm">Annuler</button>`;
+                controls = `<button onclick="window.cancelMerge()" class="px-3 py-1 md:px-4 md:py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 text-xs md:text-sm shadow-neon-blue">Terminer ✅</button>`;
               } else {
-                controls = `<button onclick="window.executeMerge('${mergeState}', '${pId}')" class="px-3 py-1 md:px-4 md:py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 shadow-neon-blue animate-pulse text-xs md:text-sm">Lier ici 👈</button>`;
+                controls = `<button onclick="window.executeMerge('${pId}', '${mergeState}')" class="px-3 py-1 md:px-4 md:py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 shadow-neon-blue animate-pulse text-xs md:text-sm">Lier ici 👈</button>`;
               }
             } else {
               if (isMerged) {
@@ -801,6 +825,9 @@
             }
           }
 
+          // Si le score est 0 à cause des règles du Petit bac, on l'affiche quand même grisé pour qu'ils comprennent
+          const showScore = (!isMerging && ansObj.valid && ansObj.text) ? true : false;
+
           listHtml += `
             <div class="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl border transition-all gap-3 md:gap-0 ${rowClasses}">
                <div class="flex flex-col w-full md:w-2/3">
@@ -808,7 +835,7 @@
                  <span class="text-lg md:text-2xl font-bold leading-snug ${strike ? '' : 'text-white'}">${displayAns}</span>
                </div>
                <div class="flex items-center gap-3 self-end md:self-auto">
-                 ${!isMerging && ansObj.valid && ansObj.text ? `<span class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-xl border-2 font-black text-sm md:text-lg ${scoreBadge}">+${score}</span>` : ''}
+                 ${showScore ? `<span class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-xl border-2 font-black text-sm md:text-lg ${scoreBadge}">+${score}</span>` : ''}
                  ${controls}
                </div>
              </div>`;
@@ -819,7 +846,7 @@
             <div class="w-full max-w-4xl mx-auto mt-4 md:mt-16">
               <div class="text-center mb-6 md:mb-8">
                 <span class="text-neonRed font-bold text-xs md:text-sm uppercase tracking-widest">Bilan Question ${flow.qIndex + 1}</span>
-                <h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-2 px-2">${qText} ${isMerging ? '<span class="text-neonBlue animate-pulse block text-sm md:text-lg mt-2">Mode Fusion Activé...</span>' : ''}</h3>
+                <h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-2 px-2">${qText} ${isMerging ? '<span class="text-neonBlue animate-pulse block text-sm md:text-lg mt-2">Clique sur les mots à lier...</span>' : ''}</h3>
               </div>
               <div class="space-y-3 bg-darkCard/80 backdrop-blur-md p-4 md:p-6 rounded-3xl border border-white/10 shadow-2xl">
                 ${listHtml}
@@ -843,7 +870,10 @@
           playersKeys.forEach(pId => {
             const a = data.players[pId].answers?.[qI];
             if (a && a.valid && a.text.trim() !== "") {
-              displayScores[pId] += wFreq[normalizeWord(a.text)] === 1 ? 2 : 1;
+              const freq = wFreq[normalizeWord(a.text)];
+              if (freq === 1) displayScores[pId] += 2;
+              else if (freq === 2) displayScores[pId] += 1;
+              // Si freq >= 3, ça vaut 0 point donc on n'ajoute rien
             }
           });
         });
@@ -885,24 +915,16 @@
               </div>
             </div>`;
         } else {
-          
+          // PODIUM FINAL ADAPTATIF
           const numPlayers = sorted.length;
           let delayP1, delayP2, delayP3, delayRest;
           
           if (numPlayers >= 3) {
-            delayP3 = "1s";
-            delayP2 = "2.5s";
-            delayP1 = "4s";
-            delayRest = "5.5s";
+            delayP3 = "1.5s"; delayP2 = "3s"; delayP1 = "4.5s"; delayRest = "6s";
           } else if (numPlayers === 2) {
-            delayP3 = "0s";
-            delayP1 = "1s";
-            delayP2 = "1.5s";
-            delayRest = "2.5s";
+            delayP3 = "0s"; delayP1 = "1s"; delayP2 = "1.5s"; delayRest = "3s";
           } else {
-            delayP1 = "0.5s";
-            delayP2 = "0s"; delayP3 = "0s";
-            delayRest = "1.5s";
+            delayP1 = "0.5s"; delayP2 = "0s"; delayP3 = "0s"; delayRest = "2s";
           }
 
           const p1 = sorted[0];
@@ -922,14 +944,19 @@
               </div>`;
           });
 
+          // Largeur dynamique pour centrer
+          const winnerWidth = numPlayers === 1 ? 'w-2/3 md:w-1/2' : (numPlayers === 2 ? 'w-1/2' : 'w-1/3');
+          const p2Width = numPlayers === 2 ? 'w-1/2' : 'w-1/3';
+          const p3Width = 'w-1/3'; 
+
           html = `
             <div class="absolute inset-0 flex flex-col items-center p-4 md:p-6 overflow-y-auto pb-32 overflow-x-hidden">
               <h2 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-6 md:mb-10 mt-4 md:mt-8 text-center drop-shadow-[0_0_20px_rgba(255,51,51,0.5)] animate-slide-up">PODIUM FINAL</h2>
               
-              <div class="flex items-end justify-center gap-2 md:gap-4 w-full max-w-3xl h-64 md:h-80 mt-4 md:mt-10">
+              <div class="flex items-end justify-center gap-2 md:gap-4 w-full max-w-3xl mt-4 md:mt-10">
                 
                 ${p2 ? `
-                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP2};">
+                <div class="${p2Width} flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP2};">
                    <span class="text-sm md:text-xl font-bold text-gray-300 truncate w-full text-center px-1">${data.players[p2].name}</span>
                    <span class="text-xs md:text-sm font-black text-neonGreen mb-1">${displayScores[p2]} pts</span>
                    <div class="bg-gray-400 w-full h-32 md:h-40 rounded-t-lg flex justify-center pt-2 md:pt-4 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]">
@@ -939,18 +966,21 @@
                 ` : ''}
 
                 ${p1 ? `
-                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in z-10" style="animation-delay: ${delayP1};">
-                   <span class="text-base md:text-2xl font-black text-neonOrange truncate w-full text-center px-1 drop-shadow-md">${data.players[p1].name}</span>
-                   <span class="text-sm md:text-base font-black text-neonGreen">${displayScores[p1]} pts</span>
-                   <span class="text-5xl md:text-6xl animate-bounce mt-1 -mb-3 md:-mb-4 relative z-20">👑</span>
-                   <div class="bg-gradient-to-t from-neonOrange to-yellow-500 w-full h-40 md:h-52 rounded-t-lg flex justify-center pt-5 md:pt-6 shadow-neon-strong relative z-10">
-                     <span class="text-5xl md:text-7xl font-black text-white drop-shadow-md">#${playerRanks[p1]}</span>
+                <div class="${winnerWidth} flex flex-col items-center opacity-0 animate-drop-in z-10" style="animation-delay: ${delayP1};">
+                   <span class="text-base md:text-2xl font-black text-neonOrange truncate w-full text-center px-1 drop-shadow-md mb-1">${data.players[p1].name}</span>
+                   <span class="text-sm md:text-base font-black text-neonGreen mb-2">${displayScores[p1]} pts</span>
+                   
+                   <div class="flex flex-col items-center w-full">
+                     <span class="text-6xl md:text-7xl animate-bounce -mb-2 relative z-20">👑</span>
+                     <div class="bg-gradient-to-t from-neonOrange to-yellow-500 w-full h-40 md:h-52 rounded-t-lg flex justify-center pt-6 md:pt-8 shadow-neon-strong relative z-10">
+                       <span class="text-5xl md:text-7xl font-black text-white drop-shadow-md">#${playerRanks[p1]}</span>
+                     </div>
                    </div>
                 </div>
-                ` : '<div class="w-full"></div>'}
+                ` : ''}
 
                 ${p3 ? `
-                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP3};">
+                <div class="${p3Width} flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP3};">
                    <span class="text-sm md:text-xl font-bold text-orange-700 truncate w-full text-center px-1">${data.players[p3].name}</span>
                    <span class="text-xs md:text-sm font-black text-neonGreen mb-1">${displayScores[p3]} pts</span>
                    <div class="bg-orange-800 w-full h-24 md:h-28 rounded-t-lg flex justify-center pt-2 md:pt-4 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
@@ -984,7 +1014,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); 
+      const playersKeys = getOrderedPlayers(data); 
 
       if (step === 'splash') step = 'intro';
       else if (step === 'intro') step = 'reveal';
@@ -1004,7 +1034,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); 
+      const playersKeys = getOrderedPlayers(data); 
 
       if (step === 'leaderboard') { step = 'summary'; qIndex = data.questions.length - 1; }
       else if (step === 'summary') { step = 'reveal'; pIndex = playersKeys.length - 1; }
@@ -1022,24 +1052,34 @@
       await updateDoc(doc(db, "games", currentGameId), { validationFlow: { step, qIndex, pIndex } });
     };
 
-    window.validateAnswer = async (pId, isValid) => {
+    // --- ANIMATION DE VALIDATION ---
+    window.validateAnswer = async (e, pId, isValid) => {
       if(!isHost) return;
-      const data = currentGameState;
-      let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); 
+      const btn = e.currentTarget;
+      
+      // Animation visuelle sur le bouton
+      btn.classList.add('scale-110', 'brightness-150', 'ring-4', 'ring-white/50');
+      btn.parentElement.querySelectorAll('button').forEach(b => b.disabled = true);
+      
+      // Petit délai pour profiter de l'animation avant la transition
+      setTimeout(async () => {
+        const data = currentGameState;
+        let { step, qIndex, pIndex } = data.validationFlow;
+        const playersKeys = getOrderedPlayers(data); 
 
-      const answers = [...data.players[pId].answers];
-      answers[qIndex].valid = isValid;
+        const answers = [...data.players[pId].answers];
+        answers[qIndex].valid = isValid;
 
-      if (step === 'reveal') {
-        pIndex++;
-        if (pIndex >= playersKeys.length) { step = 'summary'; pIndex = 0; }
-      }
+        if (step === 'reveal') {
+          pIndex++;
+          if (pIndex >= playersKeys.length) { step = 'summary'; pIndex = 0; }
+        }
 
-      await updateDoc(doc(db, "games", currentGameId), { 
-        [`players.${pId}.answers`]: answers,
-        validationFlow: { step, qIndex, pIndex }
-      });
+        await updateDoc(doc(db, "games", currentGameId), { 
+          [`players.${pId}.answers`]: answers,
+          validationFlow: { step, qIndex, pIndex }
+        });
+      }, 400); 
     };
 
     window.undoMerge = async (pId) => {
@@ -1053,13 +1093,15 @@
 
     window.startMerge = (pId) => { mergeState = pId; window.renderValidationScreen(); };
     window.cancelMerge = () => { mergeState = null; window.renderValidationScreen(); };
-    window.executeMerge = async (sourceId, targetId) => {
+    
+    // --- FUSION MULTIPLE ---
+    window.executeMerge = async (playerToChangeId, referencePlayerId) => {
       const qIdx = currentGameState.validationFlow.qIndex;
-      const targetAns = currentGameState.players[targetId].answers[qIdx].text;
-      const answers = [...currentGameState.players[sourceId].answers];
-      answers[qIdx].text = targetAns; 
-      mergeState = null;
-      await updateDoc(doc(db, "games", currentGameId), { [`players.${sourceId}.answers`]: answers });
+      const referenceAns = currentGameState.players[referencePlayerId].answers[qIdx].text;
+      const answers = [...currentGameState.players[playerToChangeId].answers];
+      answers[qIdx].text = referenceAns; 
+      // On ne reset PAS le mergeState pour permettre au Chef de lier plusieurs personnes !
+      await updateDoc(doc(db, "games", currentGameId), { [`players.${playerToChangeId}.answers`]: answers });
     };
 
     window.nextRound = async () => {
@@ -1082,7 +1124,10 @@
         playersKeys.forEach(pId => {
           const a = data.players[pId].answers?.[qI];
           if (a && a.valid && a.text.trim() !== "") {
-            roundScores[pId] += wFreq[normalizeWord(a.text)] === 1 ? 2 : 1;
+            const freq = wFreq[normalizeWord(a.text)];
+            if (freq === 1) roundScores[pId] += 2;
+            else if (freq === 2) roundScores[pId] += 1;
+            // 0 points si 3 ou plus
           }
         });
       });
