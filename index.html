@@ -48,13 +48,17 @@
     @keyframes zoom-in { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
     .animate-zoom-in { animation: zoom-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     
+    /* Animations du Podium */
+    @keyframes drop-in { 0% { transform: scale(0.8) translateY(30px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+    .animate-drop-in { animation: drop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+    
     .merge-active { border-color: #00ccff !important; box-shadow: inset 0 0 20px rgba(0, 204, 255, 0.2); }
     #rollingLetter { transition: transform 0.3s ease, color 0.3s ease; }
   </style>
 </head>
 <body class="font-sans min-h-screen selection:bg-neonRed selection:text-white relative overflow-x-hidden flex flex-col">
 
-  <div class="hidden text-neonRed drop-shadow-[0_0_10px_rgba(255,51,51,0.8)] bg-gradient-to-r from-neonRed to-neonOrange text-transparent bg-clip-text bg-neonGreen/20 text-neonGreen border-neonGreen/50 shadow-neon-green border-neonGreen/40 bg-neonGreen/5 bg-neonOrange/20 text-neonOrange border-neonOrange/50 shadow-[0_0_15px_rgba(255,136,0,0.5)] border-neonOrange/40 bg-neonOrange/5 border-red-500/30 bg-red-500/5 line-through text-red-400 bg-green-500/20 text-green-400 border-green-500/50 bg-red-500/20 text-red-400 border-red-500/50 opacity-50 opacity-60 scale-125 drop-shadow-[0_0_30px_rgba(0,255,170,0.8)] shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none"></div>
+  <div class="hidden text-neonRed text-neonGreen text-neonOrange text-neonBlue text-red-400 text-green-400 text-gray-600 text-gray-700 text-gray-300 text-orange-700 text-orange-950 bg-neonGreen/20 bg-neonGreen/5 bg-neonOrange/20 bg-neonOrange/5 bg-red-500/5 bg-red-500/20 bg-green-500/20 bg-neonBlue/20 bg-gray-400 bg-orange-800 bg-gradient-to-t from-neonOrange to-yellow-500 border-neonGreen/50 border-neonGreen/40 border-neonOrange/50 border-neonOrange/40 border-red-500/30 border-red-500/50 border-green-500/50 border-neonBlue/50 shadow-neon shadow-neon-strong shadow-neon-green shadow-neon-blue shadow-[0_0_15px_rgba(255,136,0,0.5)] shadow-[inset_0_0_20px_rgba(0,0,0,0.3)] shadow-[inset_0_0_20px_rgba(0,0,0,0.5)] shadow-[0_0_30px_rgba(255,255,255,0.8)] shadow-[0_0_30px_rgba(255,255,255,0.2)] shadow-[0_0_20px_rgba(255,136,0,0.3)] drop-shadow-[0_0_10px_rgba(255,51,51,0.8)] drop-shadow-[0_0_30px_rgba(0,255,170,0.8)] drop-shadow-[0_0_20px_rgba(255,51,51,0.5)] opacity-50 opacity-60 scale-125 line-through disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed hover:scale-[1.02] disabled:hover:scale-100 disabled:hover:shadow-none w-full w-1/2 w-1/3"></div>
 
   <div id="screen-login" class="flex flex-col items-center justify-center min-h-screen p-4 z-10">
     <div class="text-center mb-10">
@@ -85,7 +89,7 @@
   </div>
 
   <div id="screen-lobby" class="hidden flex flex-col items-center min-h-screen p-4 md:p-6">
-    <div class="w-full max-w-4xl flex flex-col md:flex-row justify-between items-center gap-4 mb-6 md:mb-8 mt-2 md:mt-4">
+    <div class="w-full max-w-5xl flex flex-col md:flex-row justify-between items-center gap-4 mb-6 md:mb-8 mt-2 md:mt-4">
       <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange text-center">Mamie Moule Maki</h1>
       <div class="bg-darkCard border border-neonRed/30 px-6 py-2 rounded-lg shadow-neon flex items-center">
         <span class="text-gray-400 font-semibold mr-2 text-xs md:text-sm uppercase">Code Salon :</span>
@@ -93,9 +97,18 @@
       </div>
     </div>
     
-    <div id="hostSettings" class="hidden w-full max-w-4xl bg-darkCard/50 border border-neonOrange/30 p-5 md:p-6 rounded-3xl mb-6">
+    <div id="hostSettings" class="hidden w-full max-w-5xl bg-darkCard/50 border border-neonOrange/30 p-5 md:p-6 rounded-3xl mb-6">
       <h3 class="font-black text-neonOrange text-xs md:text-sm uppercase tracking-widest mb-4">⚙️ Paramètres du Show</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Nombre Manches</label>
+          <select id="settingRounds" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
+            <option value="1">1 Manche</option>
+            <option value="2">2 Manches</option>
+            <option value="3" selected>3 Manches</option>
+            <option value="5">5 Manches</option>
+          </select>
+        </div>
         <div>
           <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Chrono</label>
           <select id="settingTimer" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
@@ -112,13 +125,13 @@
             <option value="3">3 Questions</option>
             <option value="4">4 Questions</option>
             <option value="5">5 Questions</option>
-            <option value="6" selected>6 Questions (Défaut)</option>
+            <option value="6" selected>6 Questions</option>
             <option value="7">7 Questions</option>
             <option value="8">8 Questions</option>
           </select>
         </div>
         <div>
-          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Difficulté (Niveau)</label>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-1">Niveau</label>
           <select id="settingDiff" class="w-full p-3 bg-black/40 border border-white/10 rounded-xl text-white font-bold outline-none focus:border-neonOrange text-sm md:text-base">
             <option value="all">Tout mélangé</option>
             <option value="soft" selected>Soft (Gentil)</option>
@@ -129,7 +142,7 @@
       </div>
     </div>
 
-    <div class="bg-darkCard/90 backdrop-blur-md border border-white/10 p-5 md:p-6 rounded-3xl w-full max-w-4xl mb-8 shadow-2xl">
+    <div class="bg-darkCard/90 backdrop-blur-md border border-white/10 p-5 md:p-6 rounded-3xl w-full max-w-5xl mb-8 shadow-2xl">
       <div class="flex justify-between items-center mb-4 md:mb-6 border-b border-white/5 pb-4">
         <h3 class="font-bold text-xs md:text-sm uppercase tracking-widest text-gray-400">Joueurs Connectés</h3>
         <span class="bg-neonRed/20 text-neonRed border border-neonRed/50 text-xs font-bold px-3 py-1 rounded-full"><span id="playerCount">0</span> Joueurs</span>
@@ -148,6 +161,7 @@
 
   <div id="screen-letter-draw" class="hidden flex flex-col items-center justify-center min-h-screen p-6">
     <div class="text-center mb-10">
+      <span id="roundIndicator" class="text-neonRed font-bold text-lg md:text-xl uppercase tracking-widest mb-2 block"></span>
       <h2 class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-4 animate-pulse">Tirage en cours</h2>
       <p id="waitLetterMessage" class="text-xs md:text-sm text-gray-400 font-bold uppercase tracking-widest hidden">En attente du chef...</p>
     </div>
@@ -224,7 +238,7 @@
       "Pire prénom pour un bébé", "Une excuse de grand-mère", "Un nom de super-héros nul",
       "Un objet de vieux", "Un animal de compagnie insolite", "Un métier qui fait rêver",
       "Un nom de parfum nul", "Une excuse pour être en retard", "Un plat à la cantine de l'école",
-      "Un truc qu'on trouve dans un sac à main"
+      "Un truc qu'on trouve dans un sac à main", "Un nom de chien ridicule", "Une raison de rater le bus"
     ];
     const QUESTIONS_MOYEN = [
       "Un truc qu'on trouve sous le lit", "Ce qu'on crie quand on gagne", "Un motif de rupture idiot",
@@ -282,8 +296,9 @@
       await setDoc(doc(db, "games", currentGameId), {
         status: "lobby",
         hostId: myPlayerId,
-        settings: { timer: 60, questionsCount: 6, diff: 'soft' }, 
-        players: { [myPlayerId]: { name: myName, answers: [] } }
+        settings: { timer: 60, questionsCount: 6, diff: 'soft', roundsCount: 3 }, 
+        currentRound: 1,
+        players: { [myPlayerId]: { name: myName, answers: [], score: 0 } }
       });
       listenToGame();
     });
@@ -304,7 +319,7 @@
         if (isNameTaken) return alert("Ce pseudo est déjà pris dans ce salon !");
 
         currentGameId = code;
-        await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [] } });
+        await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [], score: 0 } });
         listenToGame();
       } else {
         alert("Salon introuvable !");
@@ -316,11 +331,20 @@
       const parsedTimer = timerVal === 'sprint' ? 'sprint' : parseInt(timerVal);
       const qCount = parseInt(document.getElementById('settingQuestions').value);
       const diffVal = document.getElementById('settingDiff').value;
+      const rCount = parseInt(document.getElementById('settingRounds').value);
 
-      await updateDoc(doc(db, "games", currentGameId), { 
+      const updates = { 
         status: "drawing_letter",
-        settings: { timer: parsedTimer, questionsCount: qCount, diff: diffVal }
+        currentRound: 1,
+        settings: { timer: parsedTimer, questionsCount: qCount, diff: diffVal, roundsCount: rCount }
+      };
+
+      Object.keys(currentGameState.players).forEach(pId => {
+        updates[`players.${pId}.score`] = 0;
+        updates[`players.${pId}.answers`] = [];
       });
+
+      await updateDoc(doc(db, "games", currentGameId), updates);
     });
 
     document.getElementById('btnStopLetter').addEventListener('click', async () => {
@@ -373,11 +397,10 @@
         if (data.status === "lobby") {
           window.isStoppingAnimation = false;
           window.hasSubmitted = false;
+          document.getElementById('questionsContainer').innerHTML = "";
           showScreen('screen-lobby');
           document.getElementById('displayCode').innerText = currentGameId;
           const list = document.getElementById('playersList');
-          
-          // FIX DÉSYNCHRO : On trie toujours les clés pour garantir le même ordre chez tout le monde !
           const playersKeys = Object.keys(data.players).sort();
           document.getElementById('playerCount').innerText = playersKeys.length;
           
@@ -406,7 +429,11 @@
         }
 
         if (data.status === "drawing_letter") {
+          window.isStoppingAnimation = false;
+          window.hasSubmitted = false;
+          document.getElementById('questionsContainer').innerHTML = "";
           showScreen('screen-letter-draw');
+          document.getElementById('roundIndicator').innerText = `Manche ${data.currentRound} / ${data.settings.roundsCount}`;
           document.getElementById('rollingLetter').classList.remove('text-neonGreen', 'scale-125', 'drop-shadow-[0_0_30px_rgba(0,255,170,0.8)]');
           document.getElementById('rollingLetter').classList.add('text-white');
           
@@ -423,7 +450,9 @@
         }
 
         if (data.status === "stopping_letter") {
+          window.hasSubmitted = false; 
           showScreen('screen-letter-draw');
+          document.getElementById('roundIndicator').innerText = `Manche ${data.currentRound} / ${data.settings.roundsCount}`;
           if (isHost) { document.getElementById('btnStopLetter').classList.add('hidden'); }
           if (!isHost) { document.getElementById('waitLetterMessage').classList.remove('hidden'); }
 
@@ -465,7 +494,7 @@
              if (document.getElementById('screen-validating').innerHTML === "") {
                document.getElementById('screen-validating').innerHTML = `
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f] px-4 text-center">
-                  <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
+                  <div class="w-12 h-12 md:w-16 h-16 border-4 border-neonOrange border-t-transparent rounded-full animate-spin mb-6"></div>
                   <h2 class="text-2xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange animate-pulse drop-shadow-md">Récupération des copies...</h2>
                 </div>`;
              }
@@ -482,10 +511,10 @@
               container.innerHTML += `
                 <div class="group relative bg-[#15181e] border border-white/5 p-4 md:p-6 rounded-2xl transition-all duration-300 focus-within:border-neonOrange/50 focus-within:shadow-[0_0_30px_rgba(255,136,0,0.1)] hover:-translate-y-1 hover:shadow-xl">
                   <label class="flex items-center gap-3 px-1 pb-3 cursor-pointer" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-lg bg-white/10 text-white/80 text-[10px] md:text-xs font-black border border-white/5 flex-shrink-0">${index+1}</span>
+                    <span class="flex items-center justify-center w-6 h-6 md:w-7 h-7 rounded-lg bg-white/10 text-white/80 text-[10px] md:text-xs font-black border border-white/5 flex-shrink-0">${index+1}</span>
                     <span class="text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest leading-snug">${q}</span>
                   </label>
-                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 md:py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
+                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 py-4 rounded-xl border border-black/80 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] focus-within:bg-[#0d0f14] transition-colors cursor-text" onclick="document.getElementById('answer-${index}').focus()">
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black text-lg md:text-2xl select-none lowercase">${data.currentLetter}</span>
                     <input type="text" id="answer-${index}" autocomplete="off" class="w-full bg-transparent text-white outline-none font-black text-lg md:text-2xl tracking-wide placeholder-gray-800" placeholder="ape la suite...">
                   </div>
@@ -563,7 +592,7 @@
             const myAnswers = [];
             for (let i = 0; i < currentGameState.questions.length; i++) {
               const input = document.getElementById(`answer-${i}`);
-              myAnswers.push({ text: input ? input.value.trim() : "", valid: true });
+              myAnswers.push({ text: input ? input.value.trim() : "", originalText: input ? input.value.trim() : "", valid: true });
             }
             updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.answers`]: myAnswers });
           }
@@ -596,7 +625,7 @@
         if(input) {
           input.disabled = true;
           input.parentElement.classList.add('opacity-50');
-          myAnswers.push({ text: input.value.trim(), valid: true });
+          myAnswers.push({ text: input.value.trim(), originalText: input.value.trim(), valid: true });
         }
       }
       
@@ -623,23 +652,22 @@
       if(!flow) return; 
 
       const container = document.getElementById('screen-validating');
-      // FIX DÉSYNCHRO : On trie toujours les joueurs par ordre alphabétique de leurs identifiants
       const playersKeys = Object.keys(data.players).sort();
+      const isFinalRound = data.currentRound >= data.settings.roundsCount;
       
       let html = '';
       let hostControls = '';
 
       if (isHost) {
-        const canGoBack = !(flow.step === 'splash' || (flow.step === 'intro' && flow.qIndex === 0));
+        const canGoBack = !(flow.step === 'splash' || (flow.step === 'intro' && flow.qIndex === 0) || flow.step === 'leaderboard');
 
-        // Panneau de contrôle du chef
         if (['splash', 'intro', 'summary'].includes(flow.step) || canGoBack) {
            hostControls += `<div class="fixed bottom-4 md:bottom-8 left-0 w-full px-4 md:px-8 z-50 flex justify-between pointer-events-none">`;
            
            if (canGoBack) {
              hostControls += `<button onclick="window.prevFlow()" class="pointer-events-auto bg-[#1a1d24] text-white border border-white/10 font-black py-3 px-5 md:py-4 md:px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] hover:bg-[#222630] transform hover:scale-105 transition-all text-sm md:text-xl uppercase tracking-widest shadow-lg">⬅️ Retour</button>`;
            } else {
-             hostControls += `<div></div>`; // Spacer
+             hostControls += `<div></div>`;
            }
 
            if (['splash', 'intro', 'summary'].includes(flow.step)) {
@@ -648,8 +676,15 @@
 
            hostControls += `</div>`;
         }
+        
+        if (flow.step === 'leaderboard' && !isFinalRound) {
+           hostControls += `<button onclick="window.nextRound()" class="fixed bottom-8 right-8 z-50 bg-white text-darkBg font-black py-4 px-8 rounded-xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-xl uppercase tracking-widest shadow-neon-strong">Manche Suivante ➔</button>`;
+        }
+
       } else {
-        hostControls += `<div class="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-neonOrange border border-neonOrange/30 font-black py-2 px-6 md:py-3 md:px-8 rounded-full shadow-[0_0_20px_rgba(255,136,0,0.3)] animate-pulse flex items-center gap-3 whitespace-nowrap text-xs md:text-base"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-neonOrange border-t-transparent rounded-full animate-spin"></div> En attente du chef...</div>`;
+        if(flow.step !== 'leaderboard') {
+          hostControls += `<div class="fixed bottom-4 md:bottom-8 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-neonOrange border border-neonOrange/30 font-black py-2 px-6 md:py-3 md:px-8 rounded-full shadow-[0_0_20px_rgba(255,136,0,0.3)] animate-pulse flex items-center gap-3 whitespace-nowrap text-xs md:text-base"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-neonOrange border-t-transparent rounded-full animate-spin"></div> En attente du chef...</div>`;
+        }
       }
 
       if (flow.step === 'splash') {
@@ -671,7 +706,6 @@
          const qText = data.questions[flow.qIndex];
          const pId = playersKeys[flow.pIndex];
          
-         // Sécurité en cas de désynchro très courte
          if(!pId || !data.players[pId]) return;
 
          const pName = data.players[pId].name;
@@ -693,8 +727,6 @@
            } else {
              controls = `<button onclick="window.nextFlow()" class="mt-10 md:mt-16 bg-white/10 text-white font-bold py-3 px-8 md:py-4 md:px-12 rounded-2xl border border-white/20 hover:bg-white/20 animate-slide-up uppercase tracking-widest text-base md:text-xl">Continuer ➔</button>`;
            }
-           
-           controls += `<div class="mt-6 md:mt-10 animate-slide-up opacity-0" style="animation-delay: 0.6s;"><button onclick="window.prevFlow()" class="text-gray-500 hover:text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest flex items-center gap-2 px-4 py-2"><span class="text-lg leading-none mb-1">⬅</span> Retour au précédent</button></div>`;
          }
 
          html = `
@@ -750,6 +782,9 @@
 
           let controls = "";
           if (isHost && ansObj.valid && ansObj.text !== "") {
+            const originalText = ansObj.originalText !== undefined ? ansObj.originalText : ansObj.text;
+            const isMerged = ansObj.text !== originalText;
+
             if (isMerging) {
               if (mergeState === pId) {
                 rowClasses = "merge-active";
@@ -758,7 +793,11 @@
                 controls = `<button onclick="window.executeMerge('${mergeState}', '${pId}')" class="px-3 py-1 md:px-4 md:py-2 bg-neonBlue/20 text-neonBlue font-bold rounded-lg border border-neonBlue/50 shadow-neon-blue animate-pulse text-xs md:text-sm">Lier ici 👈</button>`;
               }
             } else {
-              controls = `<button onclick="window.startMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-xl text-base md:text-lg hover:bg-blue-500/40" title="Fusionner">🔗</button>`;
+              if (isMerged) {
+                 controls = `<button onclick="window.undoMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-gray-500/20 text-gray-400 border border-gray-500/50 rounded-xl text-base md:text-lg hover:bg-gray-500/40" title="Casser le lien">✂️</button>`;
+              } else {
+                 controls = `<button onclick="window.startMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-blue-500/20 text-blue-400 border border-blue-500/50 rounded-xl text-base md:text-lg hover:bg-blue-500/40" title="Fusionner">🔗</button>`;
+              }
             }
           }
 
@@ -789,8 +828,8 @@
           </div>`;
       }
       else if (flow.step === 'leaderboard') {
-        const scores = {};
-        playersKeys.forEach(k => scores[k] = 0);
+        const displayScores = {};
+        playersKeys.forEach(k => displayScores[k] = data.players[k].score || 0);
 
         data.questions.forEach((_, qI) => {
           const wFreq = {};
@@ -804,43 +843,131 @@
           playersKeys.forEach(pId => {
             const a = data.players[pId].answers?.[qI];
             if (a && a.valid && a.text.trim() !== "") {
-              scores[pId] += wFreq[normalizeWord(a.text)] === 1 ? 2 : 1;
+              displayScores[pId] += wFreq[normalizeWord(a.text)] === 1 ? 2 : 1;
             }
           });
         });
 
-        // FIX ÉGALITÉS : On trie puis on assigne un rang intelligent
-        const sorted = playersKeys.sort((a,b) => scores[b] - scores[a]);
+        const sorted = playersKeys.sort((a,b) => displayScores[b] - displayScores[a]);
         
-        let lbHtml = '';
         let currentRank = 1;
         let previousScore = -1;
+        const playerRanks = {};
 
         sorted.forEach((pId, idx) => {
-          if (scores[pId] !== previousScore) {
+          if (displayScores[pId] !== previousScore) {
             currentRank = idx + 1;
-            previousScore = scores[pId];
+            previousScore = displayScores[pId];
           }
-          const isFirst = currentRank === 1;
-
-          lbHtml += `
-            <div class="flex items-center justify-between p-4 md:p-5 bg-[#0a0c0f] rounded-2xl border ${isFirst ? 'border-neonOrange/50 shadow-neon' : 'border-white/5'}">
-              <div class="flex items-center gap-3 md:gap-4 truncate">
-                <span class="text-2xl md:text-3xl font-black ${isFirst ? 'text-neonOrange' : 'text-gray-600'}">#${currentRank}</span>
-                <span class="text-lg md:text-2xl font-bold text-white truncate">${data.players[pId].name}</span>
-              </div>
-              <span class="text-xl md:text-3xl font-black text-neonGreen whitespace-nowrap ml-2">${scores[pId]} pts</span>
-            </div>`;
+          playerRanks[pId] = currentRank;
         });
 
-        html = `
-          <div class="absolute inset-0 flex flex-col items-center p-4 md:p-6 overflow-y-auto pb-32">
-            <h2 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-8 md:mb-10 mt-8 md:mt-10 text-center drop-shadow-md">CLASSEMENT FINAL</h2>
-            <div class="w-full max-w-2xl space-y-3 md:space-y-4 bg-darkCard/80 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/10 shadow-2xl">
-              ${lbHtml}
-            </div>
-            ${isHost ? `<button onclick="window.startNewRound()" class="mt-10 md:mt-12 bg-white text-darkBg font-black py-4 px-12 md:py-5 md:px-16 rounded-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-xl md:text-2xl uppercase tracking-widest shadow-neon-strong mb-10">Nouvelle Manche</button>` : ''}
-          </div>`;
+        if (!isFinalRound) {
+          let lbHtml = '';
+          sorted.forEach((pId, idx) => {
+            const isFirst = playerRanks[pId] === 1;
+            lbHtml += `
+              <div class="flex items-center justify-between p-4 md:p-5 bg-[#0a0c0f] rounded-2xl border ${isFirst ? 'border-neonOrange/50 shadow-neon' : 'border-white/5'}">
+                <div class="flex items-center gap-3 md:gap-4 truncate">
+                  <span class="text-2xl md:text-3xl font-black ${isFirst ? 'text-neonOrange' : 'text-gray-600'}">#${playerRanks[pId]}</span>
+                  <span class="text-lg md:text-2xl font-bold text-white truncate">${data.players[pId].name}</span>
+                </div>
+                <span class="text-xl md:text-3xl font-black text-neonGreen whitespace-nowrap ml-2">${displayScores[pId]} pts</span>
+              </div>`;
+          });
+
+          html = `
+            <div class="absolute inset-0 flex flex-col items-center p-4 md:p-6 overflow-y-auto pb-32">
+              <span class="text-neonRed font-bold text-sm md:text-xl uppercase tracking-widest mt-6 md:mt-10">Classement Manche ${data.currentRound} / ${data.settings.roundsCount}</span>
+              <h2 class="text-3xl md:text-5xl font-black text-white mb-8 md:mb-10 mt-2 text-center drop-shadow-md">Scores Globaux</h2>
+              <div class="w-full max-w-2xl space-y-3 md:space-y-4 bg-darkCard/80 backdrop-blur-md p-5 md:p-8 rounded-3xl border border-white/10 shadow-2xl">
+                ${lbHtml}
+              </div>
+            </div>`;
+        } else {
+          
+          const numPlayers = sorted.length;
+          let delayP1, delayP2, delayP3, delayRest;
+          
+          if (numPlayers >= 3) {
+            delayP3 = "1s";
+            delayP2 = "2.5s";
+            delayP1 = "4s";
+            delayRest = "5.5s";
+          } else if (numPlayers === 2) {
+            delayP3 = "0s";
+            delayP1 = "1s";
+            delayP2 = "1.5s";
+            delayRest = "2.5s";
+          } else {
+            delayP1 = "0.5s";
+            delayP2 = "0s"; delayP3 = "0s";
+            delayRest = "1.5s";
+          }
+
+          const p1 = sorted[0];
+          const p2 = numPlayers >= 2 ? sorted[1] : null;
+          const p3 = numPlayers >= 3 ? sorted[2] : null;
+          const others = sorted.slice(3);
+
+          let otherPlayersHtml = '';
+          others.forEach(pId => {
+            otherPlayersHtml += `
+              <div class="flex items-center justify-between p-3 bg-black/40 rounded-xl border border-white/5">
+                <div class="flex items-center gap-3 truncate">
+                  <span class="text-xl font-black text-gray-600">#${playerRanks[pId]}</span>
+                  <span class="text-lg font-bold text-gray-300 truncate">${data.players[pId].name}</span>
+                </div>
+                <span class="text-lg font-black text-neonGreen">${displayScores[pId]} pts</span>
+              </div>`;
+          });
+
+          html = `
+            <div class="absolute inset-0 flex flex-col items-center p-4 md:p-6 overflow-y-auto pb-32 overflow-x-hidden">
+              <h2 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange mb-6 md:mb-10 mt-4 md:mt-8 text-center drop-shadow-[0_0_20px_rgba(255,51,51,0.5)] animate-slide-up">PODIUM FINAL</h2>
+              
+              <div class="flex items-end justify-center gap-2 md:gap-4 w-full max-w-3xl h-64 md:h-80 mt-4 md:mt-10">
+                
+                ${p2 ? `
+                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP2};">
+                   <span class="text-sm md:text-xl font-bold text-gray-300 truncate w-full text-center px-1">${data.players[p2].name}</span>
+                   <span class="text-xs md:text-sm font-black text-neonGreen mb-1">${displayScores[p2]} pts</span>
+                   <div class="bg-gray-400 w-full h-32 md:h-40 rounded-t-lg flex justify-center pt-2 md:pt-4 shadow-[inset_0_0_20px_rgba(0,0,0,0.3)]">
+                     <span class="text-3xl md:text-5xl font-black text-gray-700">#${playerRanks[p2]}</span>
+                   </div>
+                </div>
+                ` : ''}
+
+                ${p1 ? `
+                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in z-10" style="animation-delay: ${delayP1};">
+                   <span class="text-base md:text-2xl font-black text-neonOrange truncate w-full text-center px-1 drop-shadow-md">${data.players[p1].name}</span>
+                   <span class="text-sm md:text-base font-black text-neonGreen">${displayScores[p1]} pts</span>
+                   <span class="text-5xl md:text-6xl animate-bounce mt-1 -mb-3 md:-mb-4 relative z-20">👑</span>
+                   <div class="bg-gradient-to-t from-neonOrange to-yellow-500 w-full h-40 md:h-52 rounded-t-lg flex justify-center pt-5 md:pt-6 shadow-neon-strong relative z-10">
+                     <span class="text-5xl md:text-7xl font-black text-white drop-shadow-md">#${playerRanks[p1]}</span>
+                   </div>
+                </div>
+                ` : '<div class="w-full"></div>'}
+
+                ${p3 ? `
+                <div class="w-1/3 flex flex-col items-center opacity-0 animate-drop-in" style="animation-delay: ${delayP3};">
+                   <span class="text-sm md:text-xl font-bold text-orange-700 truncate w-full text-center px-1">${data.players[p3].name}</span>
+                   <span class="text-xs md:text-sm font-black text-neonGreen mb-1">${displayScores[p3]} pts</span>
+                   <div class="bg-orange-800 w-full h-24 md:h-28 rounded-t-lg flex justify-center pt-2 md:pt-4 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+                     <span class="text-3xl md:text-5xl font-black text-orange-950">#${playerRanks[p3]}</span>
+                   </div>
+                </div>
+                ` : ''}
+              </div>
+
+              <div class="w-full max-w-xl mt-8 space-y-2 opacity-0 animate-drop-in" style="animation-delay: ${delayRest};">
+                ${otherPlayersHtml}
+              </div>
+
+              ${isHost ? `<button onclick="window.backToLobby()" class="mt-12 bg-white text-darkBg font-black py-4 px-12 md:py-5 md:px-16 rounded-2xl hover:shadow-[0_0_30px_rgba(255,255,255,0.8)] transform hover:scale-105 transition-all text-xl md:text-2xl uppercase tracking-widest shadow-neon-strong opacity-0 animate-drop-in" style="animation-delay: ${delayRest};">Retour au Salon</button>` : ''}
+              ${!isHost ? `<p class="mt-12 text-gray-500 font-bold uppercase tracking-widest opacity-0 animate-drop-in" style="animation-delay: ${delayRest};">En attente du chef...</p>` : ''}
+            </div>`;
+        }
       }
 
       container.innerHTML = html + hostControls;
@@ -857,7 +984,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); // TRÈS IMPORTANT LE SORT() ICI
+      const playersKeys = Object.keys(data.players).sort(); 
 
       if (step === 'splash') step = 'intro';
       else if (step === 'intro') step = 'reveal';
@@ -877,7 +1004,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); // ET ICI
+      const playersKeys = Object.keys(data.players).sort(); 
 
       if (step === 'leaderboard') { step = 'summary'; qIndex = data.questions.length - 1; }
       else if (step === 'summary') { step = 'reveal'; pIndex = playersKeys.length - 1; }
@@ -899,7 +1026,7 @@
       if(!isHost) return;
       const data = currentGameState;
       let { step, qIndex, pIndex } = data.validationFlow;
-      const playersKeys = Object.keys(data.players).sort(); // ET ICI
+      const playersKeys = Object.keys(data.players).sort(); 
 
       const answers = [...data.players[pId].answers];
       answers[qIndex].valid = isValid;
@@ -915,6 +1042,15 @@
       });
     };
 
+    window.undoMerge = async (pId) => {
+      const qIdx = currentGameState.validationFlow.qIndex;
+      const answers = [...currentGameState.players[pId].answers];
+      if(answers[qIdx].originalText !== undefined) {
+          answers[qIdx].text = answers[qIdx].originalText; 
+      }
+      await updateDoc(doc(db, "games", currentGameId), { [`players.${pId}.answers`]: answers });
+    };
+
     window.startMerge = (pId) => { mergeState = pId; window.renderValidationScreen(); };
     window.cancelMerge = () => { mergeState = null; window.renderValidationScreen(); };
     window.executeMerge = async (sourceId, targetId) => {
@@ -926,12 +1062,56 @@
       await updateDoc(doc(db, "games", currentGameId), { [`players.${sourceId}.answers`]: answers });
     };
 
-    window.startNewRound = async () => {
-      document.getElementById('questionsContainer').innerHTML = "";
-      const updates = { status: "lobby" };
-      Object.keys(currentGameState.players).forEach(pId => updates[`players.${pId}.answers`] = []);
+    window.nextRound = async () => {
+      if(!isHost) return;
+      const data = currentGameState;
+      const playersKeys = Object.keys(data.players);
+
+      const roundScores = {};
+      playersKeys.forEach(k => roundScores[k] = 0);
+
+      data.questions.forEach((_, qI) => {
+        const wFreq = {};
+        playersKeys.forEach(pId => {
+          const a = data.players[pId].answers?.[qI];
+          if (a && a.valid && a.text.trim() !== "") {
+            const n = normalizeWord(a.text);
+            wFreq[n] = (wFreq[n] || 0) + 1;
+          }
+        });
+        playersKeys.forEach(pId => {
+          const a = data.players[pId].answers?.[qI];
+          if (a && a.valid && a.text.trim() !== "") {
+            roundScores[pId] += wFreq[normalizeWord(a.text)] === 1 ? 2 : 1;
+          }
+        });
+      });
+
+      const updates = {};
+      playersKeys.forEach(pId => {
+        const newTotal = (data.players[pId].score || 0) + roundScores[pId];
+        updates[`players.${pId}.score`] = newTotal;
+        updates[`players.${pId}.answers`] = [];
+      });
+
+      updates.currentRound = data.currentRound + 1;
+      updates.status = "drawing_letter"; 
+      updates.validationFlow = deleteField(); 
+
       await updateDoc(doc(db, "games", currentGameId), updates);
     };
+
+    window.backToLobby = async () => {
+      if(!isHost) return;
+      const data = currentGameState;
+      const updates = { status: "lobby" };
+      Object.keys(data.players).forEach(pId => {
+        updates[`players.${pId}.answers`] = [];
+        updates[`players.${pId}.score`] = 0; 
+      });
+      await updateDoc(doc(db, "games", currentGameId), updates);
+    };
+
   </script>
 </body>
 </html>
