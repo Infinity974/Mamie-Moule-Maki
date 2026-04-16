@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light dark">
   <title>Mamie Moule Maki - Liquid Glass Edition</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,7 +14,7 @@
     /* ==========================================================================
        1. FOND D'ÉCRAN NOIR APPLE ET ANIMATIONS DE FOND
        ========================================================================== */
-    html { scrollbar-gutter: stable; }
+    html { scrollbar-gutter: stable; background-color: #000000; }
     
     @keyframes bgDrift {
       0% { background-position: 0% 50%; }
@@ -211,7 +212,6 @@
 
     #modal-overlay, #settings-modal-overlay { transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 99999 !important; }
     
-    /* Popups très opaques */
     .custom-modal, .settings-modal { 
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.0) 100%), rgba(12, 12, 15, 0.95) !important;
@@ -241,7 +241,7 @@
     /* ==========================================================================
        8. MODE CLAIR (BEIGE/BLANC PREMIUM)
        ========================================================================= */
-    body.light-mode {
+    html.light-mode, body.light-mode {
       background-color: #f4f0eb !important;
       background-image: 
         radial-gradient(circle at 10% 40%, rgba(255, 150, 100, 0.08), transparent 45%),
@@ -250,12 +250,16 @@
       color: #1a1a1a !important;
     }
 
-    body.light-mode .text-white { color: #1a1a1a !important; text-shadow: none !important; -webkit-text-fill-color: #1a1a1a !important; }
-    body.light-mode .text-transparent.bg-clip-text { color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; text-shadow: none !important; }
-    body.light-mode .text-gray-400 { color: #6b7280 !important; }
-    body.light-mode .text-gray-500 { color: #4b5563 !important; }
+    html.light-mode .text-white, body.light-mode .text-white { color: #1a1a1a !important; text-shadow: none !important; -webkit-text-fill-color: #1a1a1a !important; }
+    html.light-mode .text-transparent.bg-clip-text, body.light-mode .text-transparent.bg-clip-text { color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; text-shadow: none !important; }
+    html.light-mode .text-gray-400, body.light-mode .text-gray-400 { color: #6b7280 !important; }
+    html.light-mode .text-gray-500, body.light-mode .text-gray-500 { color: #4b5563 !important; }
 
-    body.light-mode .bg-darkCard, body.light-mode .glass-panel, body.light-mode [class*="bg-["] {
+    html.light-mode .bg-darkCard, body.light-mode .bg-darkCard,
+    html.light-mode .glass-panel, body.light-mode .glass-panel,
+    html.light-mode .bg-\[\#13151a\]\/80, body.light-mode .bg-\[\#13151a\]\/80,
+    html.light-mode .bg-\[\#15181e\], body.light-mode .bg-\[\#15181e\],
+    html.light-mode .bg-\[\#0a0c0f\], body.light-mode .bg-\[\#0a0c0f\] {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.2) 100%), rgba(255, 255, 255, 0.3) !important;
       border: 1px solid rgba(255, 255, 255, 0.6) !important;
       border-top: 2px solid rgba(255, 255, 255, 0.9) !important;
@@ -263,40 +267,51 @@
       box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
     }
     
-    body.light-mode .custom-modal, body.light-mode .settings-modal {
+    html.light-mode .custom-modal, body.light-mode .custom-modal,
+    html.light-mode .settings-modal, body.light-mode .settings-modal {
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.5) 100%), rgba(245, 240, 235, 0.98) !important;
     }
 
-    body.light-mode .border-white\/5, body.light-mode .border-white\/10, body.light-mode .border-white\/20 { border-color: rgba(0,0,0,0.1) !important; }
-    body.light-mode .bg-white\/5, body.light-mode .bg-white\/10 { background: rgba(0,0,0,0.05) !important; color: #1a1a1a !important; border-color: rgba(0,0,0,0.1) !important;}
+    html.light-mode .border-white\/5, body.light-mode .border-white\/5,
+    html.light-mode .border-white\/10, body.light-mode .border-white\/10,
+    html.light-mode .border-white\/20, body.light-mode .border-white\/20 { border-color: rgba(0,0,0,0.1) !important; }
     
-    body.light-mode input, body.light-mode select { 
+    html.light-mode .bg-white\/5, body.light-mode .bg-white\/5,
+    html.light-mode .bg-white\/10, body.light-mode .bg-white\/10 { background: rgba(0,0,0,0.05) !important; color: #1a1a1a !important; border-color: rgba(0,0,0,0.1) !important;}
+    
+    html.light-mode input, body.light-mode input,
+    html.light-mode select, body.light-mode select { 
       background-color: rgba(255, 255, 255, 0.5) !important; 
       color: #1a1a1a !important; 
       border-color: rgba(0,0,0,0.1) !important; 
       box-shadow: inset 0 2px 5px rgba(0,0,0,0.05) !important; 
     }
-    body.light-mode input:focus, body.light-mode select:focus { background-color: rgba(255, 255, 255, 0.8) !important; border-color: rgba(0,0,0,0.2) !important; box-shadow: inset 0 2px 8px rgba(0,0,0,0.1) !important; }
-    body.light-mode input::placeholder { color: rgba(0,0,0,0.4) !important; }
+    html.light-mode input:focus, body.light-mode input:focus,
+    html.light-mode select:focus, body.light-mode select:focus { background-color: rgba(255, 255, 255, 0.8) !important; border-color: rgba(0,0,0,0.2) !important; box-shadow: inset 0 2px 8px rgba(0,0,0,0.1) !important; }
+    html.light-mode input::placeholder, body.light-mode input::placeholder { color: rgba(0,0,0,0.4) !important; }
     
-    body.light-mode .btn-solid-white { background: linear-gradient(135deg, #ffffff 0%, #f4f0eb 100%) !important; color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important; border: 1px solid rgba(0,0,0,0.05) !important; font-weight: 900 !important;}
-    body.light-mode .btn-solid-white:hover { background: #ffffff !important; transform: translateY(-2px) scale(1.02) !important; box-shadow: 0 12px 25px rgba(0,0,0,0.15) !important; }
+    html.light-mode .btn-solid-white, body.light-mode .btn-solid-white { background: linear-gradient(135deg, #ffffff 0%, #f4f0eb 100%) !important; color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; box-shadow: 0 8px 20px rgba(0,0,0,0.08) !important; border: 1px solid rgba(0,0,0,0.05) !important; font-weight: 900 !important;}
+    html.light-mode .btn-solid-white:hover, body.light-mode .btn-solid-white:hover { background: #ffffff !important; transform: translateY(-2px) scale(1.02) !important; box-shadow: 0 12px 25px rgba(0,0,0,0.15) !important; }
     
-    body.light-mode .bg-black\/40 { background-color: rgba(255,255,255,0.4) !important; border: 1px solid rgba(0,0,0,0.1) !important; box-shadow: none !important;}
-    body.light-mode .bg-black\/80 { background-color: rgba(255,255,255,0.8) !important; border: 1px solid rgba(0,0,0,0.1) !important; box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;}
+    html.light-mode .bg-black\/40, body.light-mode .bg-black\/40 { background-color: rgba(255,255,255,0.4) !important; border: 1px solid rgba(0,0,0,0.1) !important; box-shadow: none !important;}
+    html.light-mode .bg-black\/80, body.light-mode .bg-black\/80 { background-color: rgba(255,255,255,0.8) !important; border: 1px solid rgba(0,0,0,0.1) !important; box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;}
 
-    body.light-mode #settings-notch { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
-    body.light-mode #settings-notch svg { color: #1a1a1a !important; opacity: 0.7; }
-    body.light-mode #settings-notch:hover svg { opacity: 1; }
-    body.light-mode #settings-notch span { color: rgba(0,0,0,0.5); }
-    body.light-mode #settings-modal-overlay button svg { stroke: #1a1a1a; }
+    html.light-mode #settings-notch, body.light-mode #settings-notch { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); box-shadow: 0 -5px 20px rgba(0,0,0,0.05); }
+    html.light-mode #settings-notch svg, body.light-mode #settings-notch svg { color: #1a1a1a !important; opacity: 0.7; }
+    html.light-mode #settings-notch:hover svg, body.light-mode #settings-notch:hover svg { opacity: 1; }
+    html.light-mode #settings-notch span, body.light-mode #settings-notch span { color: rgba(0,0,0,0.5); }
+    html.light-mode #settings-modal-overlay button svg, body.light-mode #settings-modal-overlay button svg { stroke: #1a1a1a; }
     
-    body.light-mode .bg-gradient-to-t, body.light-mode .bg-gray-400, body.light-mode .bg-orange-800 {
+    html.light-mode .bg-gradient-to-t, body.light-mode .bg-gradient-to-t,
+    html.light-mode .bg-gray-400, body.light-mode .bg-gray-400,
+    html.light-mode .bg-orange-800, body.light-mode .bg-orange-800 {
       background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.4) 100%) !important;
       border-color: rgba(255,255,255,0.6) !important;
       box-shadow: inset 0 10px 30px rgba(255, 255, 255, 0.5), 0 -10px 30px rgba(0,0,0,0.05) !important;
     }
-    body.light-mode .bg-gradient-to-t span, body.light-mode .bg-gray-400 span, body.light-mode .bg-orange-800 span {
+    html.light-mode .bg-gradient-to-t span, body.light-mode .bg-gradient-to-t span,
+    html.light-mode .bg-gray-400 span, body.light-mode .bg-gray-400 span,
+    html.light-mode .bg-orange-800 span, body.light-mode .bg-orange-800 span {
       color: #1a1a1a !important; text-shadow: none !important;
     }
   </style>
@@ -529,6 +544,7 @@
 
     const savedTheme = localStorage.getItem('mamieTheme') || 'dark';
     if (savedTheme === 'light') {
+      document.documentElement.classList.add('light-mode');
       document.body.classList.add('light-mode');
       themeToggle.checked = true;
       themeLabel.innerText = "Mode Clair ☀️";
@@ -536,10 +552,12 @@
 
     themeToggle.addEventListener('change', (e) => {
       if (e.target.checked) {
+        document.documentElement.classList.add('light-mode');
         document.body.classList.add('light-mode');
         localStorage.setItem('mamieTheme', 'light');
         themeLabel.innerText = "Mode Clair ☀️";
       } else {
+        document.documentElement.classList.remove('light-mode');
         document.body.classList.remove('light-mode');
         localStorage.setItem('mamieTheme', 'dark');
         themeLabel.innerText = "Mode Sombre 🌙";
@@ -604,23 +622,42 @@
     });
 
     window.addEventListener('DOMContentLoaded', async () => {
+      
+      // VÉRIFICATION D'EXPIRATION DE 2 MINUTES
+      const lastActive = localStorage.getItem('lastActiveTime');
+      if (lastActive && (Date.now() - parseInt(lastActive)) > 120000) { 
+        localStorage.removeItem('currentGameId');
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && key.startsWith('draftAnswers_')) {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+      
+      setInterval(() => {
+        localStorage.setItem('lastActiveTime', Date.now().toString());
+      }, 5000);
+
       onAuthStateChanged(auth, async (user) => {
         if (user) {
           myPlayerId = user.uid;
-          const savedGameId = sessionStorage.getItem('currentGameId');
+          const savedGameId = localStorage.getItem('currentGameId');
           if (savedGameId) {
             const docSnap = await getDoc(doc(db, "games", savedGameId));
             if (docSnap.exists() && docSnap.data().players[myPlayerId]) {
-              currentGameId = savedGameId; myName = sessionStorage.getItem('myName');
+              currentGameId = savedGameId; myName = localStorage.getItem('myName');
               listenToGame();
-            } else { sessionStorage.clear(); }
+            } else { 
+              localStorage.removeItem('currentGameId'); 
+              localStorage.removeItem('draftAnswers_' + savedGameId); 
+            }
           }
         }
       });
       
       signInAnonymously(auth).catch(err => {
         console.error(err);
-        alert("ATTENTION: L'Authentification Anonyme n'est pas activée sur ta console Firebase !");
       });
 
       ['settingRounds', 'settingTimer', 'settingQuestions', 'settingDiff'].forEach(id => {
@@ -652,7 +689,7 @@
           }
           await updateDoc(doc(db, "games", currentGameId), updates);
           window.showToast("Tu as quitté le salon.");
-          sessionStorage.clear();
+          localStorage.removeItem('currentGameId');
           setTimeout(() => { window.location.reload(); }, 1500); 
         }
       });
@@ -663,16 +700,21 @@
       myName = document.getElementById('playerName').value.trim();
       if (!myName) return window.showToast("Choisis un pseudo !");
       
-      const btn = document.getElementById('btnCreate'); btn.innerText = "Création..."; btn.disabled = true;
+      const btn = document.getElementById('btnCreate'); 
+      const originalText = btn.innerText;
+      btn.innerText = "Création..."; 
+      btn.disabled = true;
+      
       isHost = true; let isUnique = false; let newCode = "";
 
       while (!isUnique) {
-        newCode = Math.random().toString(36).substring(2, 6).toUpperCase(); // RETOUR À 4 LETTRES !
+        newCode = Math.random().toString(36).substring(2, 6).toUpperCase(); 
         const checkSnap = await getDoc(doc(db, "games", newCode));
         if (!checkSnap.exists()) isUnique = true;
       }
       currentGameId = newCode;
-      sessionStorage.setItem('myPlayerId', myPlayerId); sessionStorage.setItem('currentGameId', currentGameId); sessionStorage.setItem('myName', myName);
+      localStorage.setItem('currentGameId', currentGameId); 
+      localStorage.setItem('myName', myName);
 
       await setDoc(doc(db, "games", currentGameId), {
         status: "lobby", hostId: myPlayerId,
@@ -680,6 +722,7 @@
         players: { [myPlayerId]: { name: myName, answers: [], score: 0, joinedAt: Date.now(), ping: Date.now() } }
       });
       listenToGame();
+      setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 2000);
     });
 
     document.getElementById('btnJoin').addEventListener('click', async () => {
@@ -688,17 +731,37 @@
       const code = document.getElementById('joinCode').value.trim().toUpperCase();
       if (!myName || !code) return window.showToast("Pseudo et code requis !");
 
-      const docRef = doc(db, "games", code); const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        if (data.status !== "lobby") return window.showToast("Cette partie a déjà commencé !");
-        if (Object.values(data.players).some(p => p.name.toLowerCase() === myName.toLowerCase())) return window.showToast("Ce pseudo est déjà pris !");
+      const btn = document.getElementById('btnJoin');
+      const originalText = btn.innerText;
+      btn.innerText = "Connexion..."; 
+      btn.disabled = true;
 
-        currentGameId = code;
-        sessionStorage.setItem('myPlayerId', myPlayerId); sessionStorage.setItem('currentGameId', currentGameId); sessionStorage.setItem('myName', myName);
-        await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [], score: 0, joinedAt: Date.now(), ping: Date.now() } });
-        listenToGame();
-      } else { window.showToast("Salon introuvable !"); }
+      try {
+        const docRef = doc(db, "games", code); const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.status !== "lobby") {
+            btn.innerText = originalText; btn.disabled = false;
+            return window.showToast("Cette partie a déjà commencé !");
+          }
+          if (Object.values(data.players).some(p => p.name.toLowerCase() === myName.toLowerCase())) {
+            btn.innerText = originalText; btn.disabled = false;
+            return window.showToast("Ce pseudo est déjà pris !");
+          }
+
+          currentGameId = code;
+          localStorage.setItem('currentGameId', currentGameId); localStorage.setItem('myName', myName);
+          await updateDoc(docRef, { [`players.${myPlayerId}`]: { name: myName, answers: [], score: 0, joinedAt: Date.now(), ping: Date.now() } });
+          listenToGame();
+          setTimeout(() => { btn.innerText = originalText; btn.disabled = false; }, 2000);
+        } else { 
+          btn.innerText = originalText; btn.disabled = false;
+          window.showToast("Salon introuvable !"); 
+        }
+      } catch (err) {
+        btn.innerText = originalText; btn.disabled = false;
+        window.showToast("Erreur de connexion !");
+      }
     });
 
     document.getElementById('btnStart').addEventListener('click', async () => {
@@ -731,7 +794,7 @@
         const data = docSnap.data(); currentGameState = data;
 
         if (!data.players[myPlayerId]) {
-          sessionStorage.clear();
+          localStorage.removeItem('currentGameId');
           if(!window.isVoluntaryExit) {
             window.showToast("Tu as été expulsé du salon.");
             setTimeout(() => window.location.reload(), 2000);
@@ -739,19 +802,30 @@
           return;
         }
 
-        const now = Date.now(); const playersKeys = Object.keys(data.players);
-        playersKeys.forEach(pId => {
-          const lastPing = data.players[pId].ping || data.players[pId].joinedAt || now; 
-          if (now - lastPing > 60000) { 
-            if (pId === data.hostId) {
-              const survivors = playersKeys.filter(id => id !== data.hostId && (now - (data.players[id].ping || data.players[id].joinedAt || now) < 60000));
-              survivors.sort((a, b) => data.players[a].joinedAt - data.players[b].joinedAt);
-              if (survivors[0] === myPlayerId) updateDoc(doc(db, "games", currentGameId), { hostId: myPlayerId });
-            } else if (isHost) {
-              updateDoc(doc(db, "games", currentGameId), { [`players.${pId}`]: deleteField() });
+        const now = Date.now(); 
+        const playersKeys = Object.keys(data.players);
+        
+        // LE CHEF EXCLUT (Au bout de 30 secondes d'inactivité)
+        if (data.hostId === myPlayerId) {
+            playersKeys.forEach(pId => {
+              const lastPing = data.players[pId].ping || data.players[pId].joinedAt || now; 
+              if (now - lastPing > 30000 && pId !== myPlayerId) { 
+                  updateDoc(doc(db, "games", currentGameId), { [`players.${pId}`]: deleteField() });
+              }
+            });
+        }
+        
+        // LE SALON VERIFIE LE CHEF (Au bout de 15 secondes d'inactivité)
+        if (data.hostId !== myPlayerId && data.hostId) {
+            const hostPing = data.players[data.hostId]?.ping || 0;
+            if (now - hostPing > 15000) {
+                const survivors = playersKeys.filter(id => (now - (data.players[id].ping || data.players[id].joinedAt || now) < 15000));
+                survivors.sort((a, b) => data.players[a].joinedAt - data.players[b].joinedAt);
+                if (survivors[0] === myPlayerId) {
+                    updateDoc(doc(db, "games", currentGameId), { hostId: myPlayerId });
+                }
             }
-          }
-        });
+        }
 
         isHost = (data.hostId === myPlayerId);
         
@@ -814,7 +888,7 @@
             const tick = () => {
               if (currentGameState.status !== 'stopping_letter') { window.isStoppingAnimation = false; return; }
               
-              if (step >= delays.length) { 
+              if (step >= delays.length || document.hidden) { 
                 el.innerText = data.finalLetter; 
                 el.classList.remove('text-white'); 
                 el.classList.add('text-neonGreen', 'scale-125', 'drop-shadow-[0_0_30px_rgba(0,255,170,0.8)]'); 
@@ -829,7 +903,7 @@
                            endTime: t === 'sprint' ? null : Date.now() + ((t + 2) * 1000) 
                        });
                        document.getElementById('btnStopLetter').disabled = false;
-                   }, 1500);
+                   }, document.hidden ? 2000 : 1500);
                 }
                 return; 
               }
@@ -845,6 +919,10 @@
         if (data.status === "playing") {
           window.isStoppingAnimation = false; if (rollingInterval) { clearInterval(rollingInterval); rollingInterval = null; }
           
+          if (isHost && data.endTime && Date.now() > data.endTime + 5000) {
+              updateDoc(doc(db, "games", currentGameId), { status: "validating", validationFlow: { step: 'splash', qIndex: 0, pIndex: 0 } });
+          }
+
           const playerAnswers = data.players[myPlayerId]?.answers;
           if (playerAnswers && playerAnswers.length > 0) {
              window.hasSubmitted = true;
@@ -853,7 +931,15 @@
           if (window.hasSubmitted) {
              if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
              showScreen('screen-validating');
-             if (document.getElementById('screen-validating').innerHTML === "") {
+             
+             if (data.endTime && Date.now() > data.endTime + 10000) {
+                 document.getElementById('screen-validating').innerHTML = `
+                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]/80 px-4 text-center">
+                  <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-red-500/50 border-t-red-500 rounded-full animate-spin mb-6"></div>
+                  <h2 class="text-2xl md:text-4xl font-black text-white drop-shadow-md">Le chef a un problème de connexion...</h2>
+                  <p class="text-gray-400 mt-4">Nouveau chef en cours de nomination, patiente un instant !</p>
+                 </div>`;
+             } else if (document.getElementById('screen-validating').innerHTML === "" || document.getElementById('screen-validating').innerHTML.includes("problème")) {
                document.getElementById('screen-validating').innerHTML = `
                 <div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]/50 px-4 text-center">
                   <div class="w-12 h-12 md:w-16 md:h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mb-6"></div>
@@ -868,7 +954,7 @@
           
           if (container.children.length === 0) {
             
-            const draft = JSON.parse(sessionStorage.getItem('draftAnswers_' + currentGameId) || '[]');
+            const draft = JSON.parse(localStorage.getItem('draftAnswers_' + currentGameId) || '[]');
 
             data.questions.forEach((q, index) => {
               const val = draft[index] || "";
@@ -912,7 +998,7 @@
                   inp.addEventListener('input', () => {
                     const currentDraft = [];
                     for (let j = 0; j < data.questions.length; j++) { currentDraft.push(document.getElementById(`answer-${j}`)?.value || ""); }
-                    sessionStorage.setItem('draftAnswers_' + currentGameId, JSON.stringify(currentDraft));
+                    localStorage.setItem('draftAnswers_' + currentGameId, JSON.stringify(currentDraft));
 
                     if (data.settings.timer === 'sprint') {
                       const sprintBtn = document.getElementById('btnSprint');
@@ -951,14 +1037,14 @@
           if (!window.hasSubmitted && !dbHasAnswers && currentGameState.questions) {
             window.hasSubmitted = true; 
             const myAnswers = [];
-            const draft = JSON.parse(sessionStorage.getItem('draftAnswers_' + currentGameId) || '[]');
+            const draft = JSON.parse(localStorage.getItem('draftAnswers_' + currentGameId) || '[]');
             for (let i = 0; i < currentGameState.questions.length; i++) { 
               const input = document.getElementById(`answer-${i}`); 
               let text = input ? input.value.trim() : (draft[i] || "");
               myAnswers.push({ text: text, originalText: text, valid: true }); 
             }
             updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.answers`]: myAnswers }).then(() => {
-                sessionStorage.removeItem('draftAnswers_' + currentGameId);
+                localStorage.removeItem('draftAnswers_' + currentGameId);
             });
           } else {
             window.hasSubmitted = true;
@@ -981,7 +1067,7 @@
       document.getElementById('screen-validating').innerHTML = `<div class="absolute inset-0 flex flex-col items-center justify-center bg-[#0a0c0f]/50 px-4 text-center"><div class="w-12 h-12 md:w-16 md:h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mb-6"></div><h2 class="text-2xl md:text-4xl font-black text-white drop-shadow-md">Récupération des copies...</h2></div>`;
       
       const myAnswers = [];
-      const draft = JSON.parse(sessionStorage.getItem('draftAnswers_' + currentGameId) || '[]');
+      const draft = JSON.parse(localStorage.getItem('draftAnswers_' + currentGameId) || '[]');
 
       for (let i = 0; i < count; i++) { 
         const input = document.getElementById(`answer-${i}`); 
@@ -997,8 +1083,7 @@
       
       try {
         await updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.answers`]: myAnswers });
-        
-        sessionStorage.removeItem('draftAnswers_' + currentGameId);
+        localStorage.removeItem('draftAnswers_' + currentGameId);
         
         if (isHost || forceEnd) {
            setTimeout(async () => { await updateDoc(doc(db, "games", currentGameId), { status: "validating", validationFlow: { step: 'splash', qIndex: 0, pIndex: 0 } }); }, 1500);
