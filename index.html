@@ -210,10 +210,8 @@
       100% { opacity: 0; transform: translateY(-30px) scale(0.9); filter: blur(5px); }
     }
 
-    #modal-overlay { transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 99999 !important; }
-    #settings-modal-overlay { transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 99999 !important; }
+    #modal-overlay, #settings-modal-overlay { transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 99999 !important; }
     
-    /* Popups très opaques */
     .custom-modal, .settings-modal { 
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
       background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.0) 100%), rgba(12, 12, 15, 0.95) !important;
@@ -317,21 +315,16 @@
       color: #1a1a1a !important; text-shadow: none !important;
     }
 
-    /* AJOUT: Badge du vainqueur du sprint en mode clair (Contraste amélioré) */
     html.light-mode .sprint-pill, body.light-mode .sprint-pill {
       background: rgba(0, 0, 0, 0.05) !important;
       border: 1px solid rgba(0, 0, 0, 0.1) !important;
     }
     html.light-mode .sprint-text, body.light-mode .sprint-text {
-      color: #ea580c !important; /* Orange foncé lisible */
+      color: #ea580c !important; 
       -webkit-text-fill-color: #ea580c !important;
       text-shadow: none !important;
     }
-
-    /* AJOUT: Pseudos du Podium en mode clair */
-    html.light-mode .podium-name, body.light-mode .podium-name {
-      color: #4b5563 !important; 
-    }
+    html.light-mode .podium-name, body.light-mode .podium-name { color: #4b5563 !important; }
   </style>
 </head>
 <body class="font-sans min-h-screen selection:bg-white selection:text-black relative overflow-x-hidden flex flex-col">
@@ -666,7 +659,6 @@
             if (docSnap.exists() && docSnap.data().players[myPlayerId]) {
               currentGameId = savedGameId; myName = localStorage.getItem('myName');
               listenToGame();
-              // Forcer un ping de reconnexion immediat
               updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.ping`]: Date.now() }).catch(()=>{});
             } else { 
               localStorage.removeItem('currentGameId'); 
@@ -810,7 +802,7 @@
       onSnapshot(doc(db, "games", currentGameId), (docSnap) => {
         if (!docSnap.exists()) return;
         
-        // PROTECTION GIGA-BUG : Ne jamais exécuter de logique de kick sur des données en cache !
+        // PROTECTION GIGA-BUG : Ne jamais exécuter de logique sur des données fantômes du cache
         if (docSnap.metadata.fromCache) return;
 
         const data = docSnap.data(); currentGameState = data;
@@ -827,7 +819,6 @@
         const now = Date.now(); 
         const playersKeys = Object.keys(data.players);
         
-        // 1. LE CHEF EXCLUT LES INACTIFS DE +30 SECONDES
         if (data.hostId === myPlayerId) {
             playersKeys.forEach(pId => {
               const lastPing = data.players[pId].ping || data.players[pId].joinedAt || now; 
@@ -837,13 +828,11 @@
             });
         }
         
-        // 2. LES JOUEURS REMPLACENT LE CHEF S'IL EST INACTIF DE +10 SECONDES
         if (data.hostId !== myPlayerId && data.hostId) {
             const hostPing = data.players[data.hostId]?.ping || 0;
             if (now - hostPing > 10000) {
                 const survivors = playersKeys.filter(id => (now - (data.players[id].ping || data.players[id].joinedAt || now) < 10000));
                 survivors.sort((a, b) => data.players[a].joinedAt - data.players[b].joinedAt);
-                // Si je suis le joueur le plus ancien encore en vie, je prends la place de Chef !
                 if (survivors[0] === myPlayerId) {
                     updateDoc(doc(db, "games", currentGameId), { hostId: myPlayerId });
                 }
@@ -911,12 +900,11 @@
             const tick = () => {
               if (currentGameState.status !== 'stopping_letter') { window.isStoppingAnimation = false; return; }
               
-              // SI LE TELEPHONE EST EN VEILLE, ON SAUTE L'ANIMATION POUR NE PAS DÉSYNCHRONISER
               if (step >= delays.length || document.hidden) { 
                 el.innerText = data.finalLetter; 
                 el.classList.remove('text-white'); 
                 el.classList.add('text-neonGreen', 'scale-125', 'drop-shadow-[0_0_30px_rgba(0,255,170,0.8)]'); 
-                window.isStoppingAnimation = false; 
+                // CORRECTION ROULETTE : Ne pas mettre isStoppingAnimation = false ici.
                 
                 if (isHost) {
                    setTimeout(async () => {
@@ -1127,9 +1115,6 @@
       }
     }
 
-    // =======================================================
-    // ====== MOTEUR D'AFFICHAGE TV SHOW (VALIDATION) ========
-    // =======================================================
     window.renderValidationScreen = () => {
       const data = currentGameState; const flow = data.validationFlow; if(!flow) return; 
 
@@ -1159,8 +1144,7 @@
         }
         if (flow.step === 'leaderboard' && !isFinalRound) hostControls += `<button onclick="window.nextRound()" class="fixed bottom-8 right-8 z-50 btn-solid-white py-4 px-8 text-lg md:text-xl uppercase tracking-widest ${animClass}">Manche Suivante ➔</button>`;
       } else {
-        // CORRECTION : "En attente du chef..." remonté pour ne plus cacher les paramètres
-        if(flow.step !== 'leaderboard') hostControls += `<div class="fixed bottom-20 md:bottom-16 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-white border border-white/20 font-black py-2 px-6 md:py-3 md:px-8 rounded-full flex items-center gap-3 whitespace-nowrap text-xs md:text-sm ${animClass} shadow-xl"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> En attente du chef...</div>`;
+        if(flow.step !== 'leaderboard') hostControls += `<div class="fixed bottom-24 md:bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-white border border-white/20 font-black py-2 px-6 md:py-3 md:px-8 rounded-full flex items-center gap-3 whitespace-nowrap text-xs md:text-sm ${animClass}"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> En attente du chef...</div>`;
       }
 
       if (flow.step === 'splash') {
@@ -1174,7 +1158,6 @@
       else if (flow.step === 'reveal') {
          const pId = orderedKeys[flow.pIndex]; if(!pId || !data.players[pId]) return;
          const ansObj = data.players[pId].answers?.[flow.qIndex] || { text: "", valid: true }; const hasAnswer = ansObj.text.trim() !== "";
-         // CORRECTION ESPACEMENT : Le texte est inline, aucune marge étrange possible
          const displayAns = hasAnswer ? `<div class="text-base md:text-xl leading-snug"><span class="break-all"><span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black uppercase">${data.currentLetter}</span><span class="font-bold text-white">${escapeHTML(ansObj.text)}</span></span></div>` : `<span class="italic text-gray-600 text-3xl md:text-4xl">Pas de réponse...</span>`;
          let controls = '';
          if (isHost) {
@@ -1202,7 +1185,6 @@
         orderedKeys.forEach(pId => { 
             const a = data.players[pId].answers?.[flow.qIndex] || {text:"", valid:false}; 
             if (a.valid && a.text.trim() !== "") { 
-                // CORRECTION LIAISON SCORING : Utilise le texte exact de la liaison
                 const n = a.linkedTo ? normalizeWord(a.linkedTo) : normalizeWord(a.text); 
                 wordFreq[n] = (wordFreq[n] || 0) + 1; 
             }
@@ -1219,17 +1201,14 @@
           }
           
           const strike = (!ansObj.valid && ansObj.text) ? "line-through text-red-400" : (ansObj.text ? "text-white" : "");
-          // CORRECTION ESPACEMENT : Inline block complet
           let answerContent = ansObj.text ? `<span class="break-all"><span class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black uppercase">${data.currentLetter}</span><span class="${strike} font-bold">${escapeHTML(ansObj.text)}</span></span>` : '<span class="italic text-gray-600 text-sm md:text-base">Vide</span>';
           
-          // NOUVEAU : Retour Visuel des Liaisons
           if (ansObj.linkedTo) {
              answerContent += `<div class="text-[10px] md:text-xs text-neonOrange font-bold mt-1">🔗 Relié à : ${escapeHTML(ansObj.linkedTo)}</div>`;
           }
           
           let controls = "";
           if (isHost && ansObj.valid && ansObj.text !== "") {
-            // NOUVEAU : Logique de Boutons de Liaison Multiple et Séparation
             if (ansObj.linkedTo) {
                 controls = `<button onclick="window.undoMerge('${pId}')" class="px-3 py-1.5 bg-red-500/20 text-red-400 font-bold rounded-xl text-xs md:text-sm border border-red-500/30 shadow-md">Séparer ✂️</button>`; 
             } else {
@@ -1262,8 +1241,6 @@
           const numPlayers = sorted.length; const p1 = sorted[0]; const p2 = numPlayers >= 2 ? sorted[1] : null; const p3 = numPlayers >= 3 ? sorted[2] : null; const others = sorted.slice(3);
           let otherPlayersHtml = ''; others.forEach(pId => { otherPlayersHtml += `<div class="flex items-center justify-between p-3.5 bg-white/5 rounded-xl border border-white/5"><div class="flex items-center gap-3 truncate"><span class="text-lg font-black text-gray-600">#${playerRanks[pId]}</span><span class="text-base font-bold text-gray-300 truncate">${escapeHTML(data.players[pId].name)}</span></div><span class="text-base font-black text-neonGreen">${displayScores[pId]} pts</span></div>`; });
           const winnerWidth = numPlayers === 1 ? 'w-2/3 md:w-1/2' : (numPlayers === 2 ? 'w-1/2' : 'w-1/3'); const p2Width = numPlayers === 2 ? 'w-1/2' : 'w-1/3'; const p3Width = 'w-1/3'; 
-          
-          // CORRECTION VISIBILITÉ PODIUM (Classe podium-name ajoutée)
           html = `<div class="absolute inset-0 flex flex-col items-center p-6 md:p-10 overflow-y-auto pb-40 overflow-x-hidden ${animClass} relative overflow-hidden"><h2 class="text-4xl md:text-6xl font-black text-white mb-10 md:mb-16 mt-6 md:mt-10 text-center drop-shadow-md">PODIUM FINAL</h2><div class="flex items-end justify-center gap-2 md:gap-5 w-full max-w-4xl mt-6 md:mt-12 z-10">${p2 ? `<div class="${p2Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-300 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p2].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2">${displayScores[p2]} pts</span><div class="bg-gray-400 w-full h-32 md:h-40 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/20 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md">#${playerRanks[p2]}</span></div></div>` : ''}${p1 ? `<div class="${winnerWidth} flex flex-col items-center z-10"><span class="text-base md:text-2xl font-black text-white truncate w-full text-center px-2 mb-1">${escapeHTML(data.players[p1].name)}</span><span class="text-sm md:text-base font-black text-neonGreen mb-3">${displayScores[p1]} pts</span><div class="flex flex-col items-center w-full"><span class="text-6xl md:text-7xl -mb-3 relative z-20 drop-shadow-lg">👑</span><div class="bg-gradient-to-t w-full h-40 md:h-56 rounded-t-2xl flex justify-center pt-8 md:pt-10 relative z-10 border-t border-white/30 shadow-2xl"><span class="text-5xl md:text-7xl font-black text-white drop-shadow-lg">#${playerRanks[p1]}</span></div></div></div>` : '<div class="w-full"></div>'}${p3 ? `<div class="${p3Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-400 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p3].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2">${displayScores[p3]} pts</span><div class="bg-orange-800 w-full h-24 md:h-32 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/15 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md">#${playerRanks[p3]}</span></div></div>` : ''}</div><div class="w-full max-w-2xl mt-10 space-y-2.5 relative z-10">${otherPlayersHtml}</div>${isHost ? `<button onclick="window.backToLobby()" class="mt-16 btn-solid-white py-5 px-16 text-xl md:text-2xl uppercase tracking-widest shadow-2xl relative z-10">Retour au Salon</button>` : ''}${!isHost ? `<p class="mt-16 text-gray-500 font-bold uppercase tracking-widest text-lg relative z-10">En attente du chef...</p>` : ''}</div>`;
         }
       }
@@ -1287,7 +1264,12 @@
       
       setTimeout(async () => {
         const data = currentGameState; let { step, qIndex, pIndex } = data.validationFlow; const keys = getOrderedPlayers(data); 
-        const ans = [...data.players[pId].answers]; ans[qIndex].valid = isValid;
+        
+        // PROTECTION BUG RESULTATS : Initialisation sécurisée au cas où le joueur ait un tableau de réponses cassé
+        let ans = data.players[pId].answers ? [...data.players[pId].answers] : [];
+        if (!ans[qIndex]) { ans[qIndex] = { text: "", valid: true }; }
+        
+        ans[qIndex].valid = isValid;
         if (step === 'reveal') { pIndex++; if (pIndex >= keys.length) { step = 'summary'; pIndex = 0; } }
         await updateDoc(doc(db, "games", currentGameId), { [`players.${pId}.answers`]: ans, validationFlow: { step, qIndex, pIndex } });
         window.isFlowProcessing = false;
@@ -1296,7 +1278,11 @@
 
     window.undoMerge = async (pId) => { 
         const qIdx = currentGameState.validationFlow.qIndex; 
-        const ans = [...currentGameState.players[pId].answers]; 
+        
+        // PROTECTION BUG RESULTATS
+        let ans = currentGameState.players[pId].answers ? [...currentGameState.players[pId].answers] : [];
+        if (!ans[qIdx]) { ans[qIdx] = { text: "", valid: true }; }
+        
         ans[qIdx].linkedTo = null; 
         await updateDoc(doc(db, "games", currentGameId), { [`players.${pId}.answers`]: ans }); 
     };
@@ -1304,23 +1290,25 @@
     window.startMerge = (pId) => { mergeState = pId; window.renderValidationScreen(); };
     window.cancelMerge = () => { mergeState = null; window.renderValidationScreen(); };
     
-    // NOUVEAU LOGIQUE DE MERGE (Garde l'état actif pour faire de multiples liaisons)
     window.executeMerge = async (p1, p2) => { 
         const qIdx = currentGameState.validationFlow.qIndex; 
-        const ref = currentGameState.players[p2].answers[qIdx].text; 
-        const ans = [...currentGameState.players[p1].answers]; 
-        ans[qIdx].linkedTo = ref; 
-        await updateDoc(doc(db, "games", currentGameId), { [`players.${p1}.answers`]: ans }); 
-        // Pas de "mergeState = null" ici pour permettre de relier d'autres joueurs
+        
+        // PROTECTION BUG RESULTATS
+        let ansP1 = currentGameState.players[p1].answers ? [...currentGameState.players[p1].answers] : [];
+        if (!ansP1[qIdx]) { ansP1[qIdx] = { text: "", valid: true }; }
+        
+        const p2Ans = currentGameState.players[p2].answers?.[qIdx];
+        const ref = p2Ans ? p2Ans.text : "";
+        
+        ansP1[qIdx].linkedTo = ref; 
+        await updateDoc(doc(db, "games", currentGameId), { [`players.${p1}.answers`]: ansP1 }); 
     };
 
     window.nextRound = async () => { if(!isHost || window.isFlowProcessing) return; window.isFlowProcessing = true; const data = currentGameState; const keys = Object.keys(data.players); const rScores = {}; keys.forEach(k => rScores[k] = 0); data.questions.forEach((_, qI) => { const wFreq = {}; keys.forEach(pId => { const a = data.players[pId].answers?.[qI]; if (a && a.valid && a.text.trim() !== "") { const n = a.linkedTo ? normalizeWord(a.linkedTo) : normalizeWord(a.text); wFreq[n] = (wFreq[n] || 0) + 1; }}); keys.forEach(pId => { const a = data.players[pId].answers?.[qI]; if (a && a.valid && a.text.trim() !== "") { const n = a.linkedTo ? normalizeWord(a.linkedTo) : normalizeWord(a.text); const freq = wFreq[n]; if (freq === 1) rScores[pId] += 2; else if (freq === 2) rScores[pId] += 1; }}); }); const updates = {}; keys.forEach(pId => { updates[`players.${pId}.score`] = (data.players[pId].score || 0) + rScores[pId]; updates[`players.${pId}.answers`] = []; }); updates.currentRound = data.currentRound + 1; updates.status = "drawing_letter"; updates.validationFlow = deleteField(); await updateDoc(doc(db, "games", currentGameId), updates); window.isFlowProcessing = false; };
     window.backToLobby = async () => { if(!isHost || window.isFlowProcessing) return; window.isFlowProcessing = true; const data = currentGameState; const updates = { status: "lobby" }; Object.keys(data.players).forEach(pId => { updates[`players.${pId}.answers`] = []; updates[`players.${pId}.score`] = 0; }); await updateDoc(doc(db, "games", currentGameId), updates); window.isFlowProcessing = false; };
 
-    // PING TOUTES LES 3 SECONDES POUR UNE ACTUALISATION TRES RAPIDE DU STATUT DU CHEF
     setInterval(() => { if (currentGameId && myPlayerId && currentGameState) { updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.ping`]: Date.now() }).catch(() => {}); } }, 3000);
     
-    // PING IMMEDIAT QUAND L'UTILISATEUR REVIENT SUR L'ONGLET
     document.addEventListener("visibilitychange", () => {
       if (document.visibilityState === "visible" && currentGameId && myPlayerId && currentGameState) {
         updateDoc(doc(db, "games", currentGameId), { [`players.${myPlayerId}.ping`]: Date.now() }).catch(() => {});
