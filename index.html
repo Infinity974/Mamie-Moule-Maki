@@ -2,8 +2,11 @@
 <html lang="fr" data-theme="default">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
   <meta name="color-scheme" content="light dark">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Mamie Moule Maki</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,7 +59,11 @@
       --accent-rgb: 138, 43, 226;
     }
 
-    html { scrollbar-gutter: stable; background-color: var(--bg-dark); }
+    html { scrollbar-gutter: stable; background-color: var(--bg-dark); height: 100dvh; overflow: hidden; }
+    /* Prevent iOS bounce scroll on the root */
+    html, body { overscroll-behavior: none; touch-action: pan-x pan-y; }
+    /* Safe area for notched phones */
+    #settings-notch { padding-bottom: max(4px, env(safe-area-inset-bottom)); }
 
     body {
       background-color: var(--bg-dark) !important;
@@ -67,8 +74,9 @@
       opacity: 0;
       animation: appFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
       transition: background-color 0.7s ease, color 0.7s ease;
-      min-height: 100vh;
+      height: 100dvh;
       overflow-x: hidden;
+      overflow-y: hidden;
     }
 
     @keyframes appFadeIn {
@@ -97,6 +105,8 @@
       z-index: 0;
       will-change: transform;
       transition: background 0.8s ease;
+      /* Contain orbs so they never expand page size */
+      max-width: 100vw;
     }
 
     .bg-orb-1 {
@@ -192,13 +202,13 @@
       pointer-events: none;
     }
 
-    /* Reflet de lumière interne fluide (Correction Parfaite) */
+    /* Reflet de lumière interne fluide (Correction de la Ligne de coupe) */
     .bg-darkCard::after,
     .bg-\[\#15181e\]::after {
       content: '';
       position: absolute;
-      inset: 0; /* Prend 100% de la carte */
-      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.03) 30%, transparent 80%, transparent 100%);
+      inset: 0;
+      background: linear-gradient(110deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.01) 60%, transparent 100%);
       border-radius: inherit;
       pointer-events: none;
       z-index: 1;
@@ -464,12 +474,12 @@
       100% { opacity: 0; transform: translateY(-18px) scale(0.95); filter: blur(4px); }
     }
 
-    #modal-overlay, #settings-modal-overlay, #hard-modal-overlay {
+    #modal-overlay, #settings-modal-overlay, #hard-modal-overlay, #rules-modal-overlay {
       transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       z-index: 99999 !important;
     }
 
-    .custom-modal, .settings-modal {
+    .custom-modal, .settings-modal, .rules-modal {
       transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
       background:
         linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.02) 100%),
@@ -510,8 +520,13 @@
         transform 0.46s cubic-bezier(0.22, 1, 0.36, 1),
         filter  0.46s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: opacity, transform, filter;
+      /* All screens fill the viewport absolutely */
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      z-index: 10;
     }
-    div[id^="screen-"].opacity-0   { transform: scale(0.974) translateY(14px); filter: blur(6px); }
+    div[id^="screen-"].opacity-0   { transform: scale(0.974) translateY(14px); filter: blur(6px); pointer-events: none; }
     div[id^="screen-"].opacity-100 { transform: scale(1)     translateY(0);    filter: blur(0);   }
 
     .fade-content {
@@ -551,8 +566,8 @@
       text-shadow: 0 0 16px rgba(var(--secondary-rgb),0.42) !important;
     }
 
-    /* Settings notch */
-    #settings-notch {
+    /* Bottom notches */
+    .bottom-notch {
       background: rgba(255,255,255,0.055) !important;
       backdrop-filter: blur(22px) !important;
       border-color: rgba(255,255,255,0.11) !important;
@@ -642,11 +657,12 @@
     }
     html.light-mode .bg-darkCard::after, body.light-mode .bg-darkCard::after,
     html.light-mode .bg-\[\#15181e\]::after, body.light-mode .bg-\[\#15181e\]::after {
-      background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 40%, transparent 80%) !important;
+      background: linear-gradient(110deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.1) 60%, transparent 100%) !important;
     }
 
     html.light-mode .custom-modal,  body.light-mode .custom-modal,
-    html.light-mode .settings-modal, body.light-mode .settings-modal {
+    html.light-mode .settings-modal, body.light-mode .settings-modal,
+    html.light-mode .rules-modal, body.light-mode .rules-modal {
       background:
         linear-gradient(145deg, rgba(255,255,255,0.96) 0%, rgba(250,247,242,0.86) 100%),
         rgba(255,255,255,0.82) !important;
@@ -739,15 +755,16 @@
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.02) !important;
     }
 
-    html.light-mode #settings-notch, body.light-mode #settings-notch {
+    html.light-mode .bottom-notch, body.light-mode .bottom-notch {
       background: rgba(255,255,255,0.72) !important;
       border-color: rgba(0,0,0,0.07) !important;
       box-shadow: 0 -5px 22px rgba(0,0,0,0.05) !important;
     }
-    html.light-mode #settings-notch svg, body.light-mode #settings-notch svg { color: #1a1714 !important; opacity: 0.58; }
-    html.light-mode #settings-notch:hover svg, body.light-mode #settings-notch:hover svg { opacity: 1; }
-    html.light-mode #settings-notch span, body.light-mode #settings-notch span { color: rgba(0,0,0,0.44); -webkit-text-fill-color: rgba(0,0,0,0.44); }
-    html.light-mode #settings-modal-overlay button svg, body.light-mode #settings-modal-overlay button svg { stroke: #1a1714; }
+    html.light-mode .bottom-notch svg, body.light-mode .bottom-notch svg { color: #1a1714 !important; opacity: 0.58; }
+    html.light-mode .bottom-notch:hover svg, body.light-mode .bottom-notch:hover svg { opacity: 1; }
+    html.light-mode .bottom-notch span, body.light-mode .bottom-notch span { color: rgba(0,0,0,0.44); -webkit-text-fill-color: rgba(0,0,0,0.44); }
+    html.light-mode #settings-modal-overlay button svg, body.light-mode #settings-modal-overlay button svg,
+    html.light-mode #rules-modal-overlay button svg, body.light-mode #rules-modal-overlay button svg { stroke: #1a1714; }
 
     /* Podium mode clair */
     html.light-mode .bg-gradient-to-t, body.light-mode .bg-gradient-to-t {
@@ -811,7 +828,7 @@
       opacity: 0.9; 
     }
 
-    /* État sélectionné (Mode Sombre) */
+    /* État sélectionné (Mode Sombre) - Effet Ring Robuste */
     #theme-selector label:has(input[type="radio"]:checked) {
       opacity: 1;
       background: rgba(255, 255, 255, 0.15) !important;
@@ -819,8 +836,8 @@
       box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
     }
     #theme-selector input[type="radio"]:checked + div {
-      transform: scale(1.15) !important;
-      box-shadow: 0 0 0 2px #ffffff, 0 0 10px rgba(255, 255, 255, 0.6) !important;
+      transform: scale(1.25) !important;
+      box-shadow: 0 0 0 2px var(--bg-dark), 0 0 0 4px #ffffff, 0 0 15px rgba(255, 255, 255, 0.8) !important;
     }
 
     /* État sélectionné (Mode Clair) */
@@ -836,7 +853,19 @@
       border-color: rgba(0,0,0,0.15) !important;
       box-shadow: 0 4px 12px rgba(0,0,0,0.06) !important;
     }
-    /* Le "Bouton sur le côté" : Interrupteur Toggle (Robuste) */
+    html.light-mode #theme-selector input[type="radio"]:checked + div {
+      box-shadow: 0 0 0 2px #faf7f2, 0 0 0 4px #1a1714, 0 0 12px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* iOS keyboard : on rebascule sur dvh dynamique pour que l'écran rétrécisse
+       quand le clavier virtuel s'ouvre, sans déclencher de scroll fantôme */
+    #screen-game {
+      height: 100dvh;
+    }
+    /* Scrollbar fine dans le container de questions */
+    #questionsContainer::-webkit-scrollbar { width: 3px; }
+    #questionsContainer::-webkit-scrollbar-track { background: transparent; }
+    #questionsContainer::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.10); border-radius: 10px; }
     .toggle-track { transition: background 0.3s ease; }
     html.light-mode .toggle-track { background: rgba(0,0,0,0.15) !important; }
     input:checked ~ .toggle-track {
@@ -845,7 +874,7 @@
   </style>
 </head>
 
-<body class="font-sans min-h-screen selection:bg-white selection:text-black relative overflow-x-hidden flex flex-col">
+<body class="font-sans selection:bg-white selection:text-black relative overflow-hidden flex flex-col" style="height:100dvh;overflow:hidden">
 
   <!-- Orbes animés pour le fond Liquid Glass -->
   <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
@@ -853,7 +882,7 @@
   <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
   <div class="bg-orb bg-orb-4" aria-hidden="true"></div>
 
-  <div id="settings-notch" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-xl border-t border-l border-r border-white/20 px-8 py-1 rounded-t-2xl z-[9000] cursor-pointer hover:bg-white/20 transition-all duration-300 flex flex-col items-center group shadow-[0_-5px_30px_rgba(0,0,0,0.3)] hover:-translate-y-1">
+  <div id="settings-notch" class="fixed bottom-0 left-1/2 transform -translate-x-1/2 bottom-notch bg-white/10 backdrop-blur-xl border-t border-l border-r border-white/20 px-8 py-1 rounded-t-2xl z-[9000] cursor-pointer hover:bg-white/20 transition-all duration-300 flex flex-col items-center group shadow-[0_-5px_30px_rgba(0,0,0,0.3)] hover:-translate-y-1">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white/70 group-hover:text-white transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7" />
     </svg>
@@ -861,7 +890,7 @@
   </div>
 
   <div id="settings-modal-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[99999] flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-400">
-    <div class="settings-modal border border-white/20 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-90 relative">
+    <div class="settings-modal custom-modal border border-white/20 rounded-3xl p-8 max-w-sm w-full mx-4 shadow-2xl transform scale-90 relative" style="max-height:90dvh;overflow-y:auto">
       <button id="close-settings" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors">
          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
       </button>
@@ -869,7 +898,7 @@
       
       <!-- Thèmes de Couleurs -->
       <div class="flex flex-col bg-black/30 p-5 rounded-2xl border border-white/10 mb-4 shadow-inner gap-4">
-        <span class="text-white font-bold tracking-widest uppercase text-sm">Thème Visuel 🎨</span>
+        <span class="text-white font-bold tracking-widest uppercase text-sm font-display">Thème Visuel 🎨</span>
         <div class="grid grid-cols-2 gap-3" id="theme-selector">
           <label class="cursor-pointer flex items-center gap-2 bg-white/5 p-2 rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
             <input type="radio" name="color-theme" value="default" class="hidden">
@@ -895,13 +924,48 @@
       </div>
 
       <div class="flex items-center justify-between bg-black/30 p-5 rounded-2xl border border-white/10 mb-6 shadow-inner">
-        <span class="text-white font-bold tracking-widest uppercase text-sm" id="theme-label">Mode Sombre 🌙</span>
+        <span class="text-white font-bold tracking-widest uppercase text-sm font-display" id="theme-label">Mode Sombre 🌙</span>
         <label class="relative inline-flex items-center cursor-pointer">
           <input type="checkbox" id="theme-toggle" class="sr-only peer">
           <div class="w-14 h-7 bg-white/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all toggle-track"></div>
         </label>
       </div>
-      <p class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest">Interface Liquid Glass Premium</p>
+
+      <!-- BOUTON RÈGLES INTÉGRÉ DANS LES PARAMÈTRES -->
+      <button id="btnRulesInsideSettings" class="w-full bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white py-4 rounded-2xl font-bold uppercase tracking-widest text-sm transition-all border border-white/10 hover:border-white/20 shadow-lg flex items-center justify-center gap-2 mb-4 font-display">
+        Comment jouer ? 📖
+      </button>
+
+      <p class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest font-display">Interface Liquid Glass Premium</p>
+    </div>
+  </div>
+
+  <!-- NOUVEAU : Modale des Règles du Jeu (Plus Lisible) -->
+  <div id="rules-modal-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-md z-[99999] flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-400">
+    <div class="rules-modal custom-modal border border-white/20 rounded-3xl p-8 max-w-sm md:max-w-md w-full mx-4 shadow-2xl transform scale-90 relative" style="max-height:90dvh;overflow-y:auto">
+      <button id="close-rules" class="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <h3 class="text-white text-3xl font-black mb-8 text-center tracking-wide font-display">Comment jouer ?</h3>
+      
+      <div class="flex flex-col bg-black/30 p-6 rounded-2xl border border-white/10 mb-5 shadow-inner gap-4">
+        <span class="text-white font-black tracking-widest uppercase text-base font-display">Le Concept 👵</span>
+        <p class="text-sm md:text-base text-gray-300 font-medium leading-relaxed"><strong class="text-white font-bold">Règle d'Or :</strong> Mamie tire une lettre au sort. TOUS tes mots doivent commencer par cette lettre.</p>
+        <p class="text-sm md:text-base text-gray-300 font-medium leading-relaxed"><strong class="text-white font-bold">Le Sprint ⏱️ :</strong> Trouve tes mots avant la fin du temps. Si activé, le premier qui finit bloque les autres !</p>
+        <p class="text-sm md:text-base text-gray-300 font-medium leading-relaxed"><strong class="text-white font-bold">L'Arbitre 👑 :</strong> Le Chef valide les mots et lie les petits malins qui font exprès des fautes d'orthographe.</p>
+      </div>
+      
+      <div class="flex flex-col bg-black/30 p-6 rounded-2xl border border-white/10 mb-6 shadow-inner gap-4">
+        <span class="text-white font-black tracking-widest uppercase text-base font-display">Scoring 💰</span>
+        <ul class="space-y-3 text-sm md:text-base text-gray-300 font-medium">
+          <li class="flex items-center gap-3"><span class="text-xl">💎</span> <span><strong class="text-transparent bg-clip-text bg-gradient-to-r from-neonRed to-neonOrange font-black tracking-wide text-base md:text-lg font-display">L'Élu :</strong> +2 pts (Mot unique)</span></li>
+          <li class="flex items-center gap-3"><span class="text-xl">🤝</span> <span><strong class="text-white font-black tracking-wide text-base md:text-lg font-display">Les Copieurs :</strong> +1 pt (2 joueurs)</span></li>
+          <li class="flex items-center gap-3"><span class="text-xl">🐑</span> <span><strong class="text-gray-500 font-black tracking-wide text-base md:text-lg font-display">Moutons :</strong> 0 pt (3+ joueurs)</span></li>
+          <li class="flex items-center gap-3"><span class="text-xl">❌</span> <span><strong class="text-red-500 font-black tracking-wide text-base md:text-lg font-display">Faux/Vide :</strong> 0 pt</span></li>
+        </ul>
+      </div>
+      
+      <p class="text-center text-[10px] text-gray-400 font-bold uppercase tracking-widest font-display">Interface Liquid Glass Premium</p>
     </div>
   </div>
 
@@ -938,15 +1002,15 @@
     </div>
   </div>
 
-  <div id="screen-login" class="flex flex-col items-center justify-center min-h-screen p-4 z-10 transition-opacity duration-400 opacity-100">
+  <div id="screen-login" class="flex flex-col items-center justify-center p-4 z-10 transition-opacity duration-400 opacity-100" style="height:100dvh;overflow-y:auto;overflow-x:hidden">
     <div class="text-center mb-10">
       <h1 class="text-5xl md:text-6xl font-black text-transparent bg-clip-text drop-shadow-md mb-2 font-display">Mamie Moule Maki</h1>
-      <p class="text-base md:text-lg text-gray-400 font-semibold uppercase tracking-widest">Le Show Déchaîné</p>
+      <p class="text-base md:text-lg text-gray-400 font-semibold uppercase tracking-widest font-display">Le Show Déchaîné</p>
     </div>
 
     <div class="bg-darkCard p-6 md:p-8 rounded-3xl shadow-2xl w-full max-w-sm space-y-6">
       <div class="space-y-2">
-        <label class="text-gray-400 font-bold text-xs uppercase tracking-widest pl-1">Ton Identité</label>
+        <label class="text-gray-400 font-bold text-xs uppercase tracking-widest pl-1 font-display">Ton Identité</label>
         <input type="text" id="playerName" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="Ex: Infinity..." class="w-full p-4 outline-none font-bold text-lg text-white">
       </div>
       <button id="btnCreate" class="w-full bg-gradient-to-r text-white font-black py-4 rounded-xl text-lg uppercase tracking-wider">
@@ -954,7 +1018,7 @@
       </button>
       <div class="relative flex py-2 items-center">
         <div class="flex-grow border-t border-white/10"></div>
-        <span class="flex-shrink-0 mx-4 text-gray-500 text-xs font-bold uppercase tracking-widest">Ou</span>
+        <span class="flex-shrink-0 mx-4 text-gray-500 text-xs font-bold uppercase tracking-widest font-display">Ou</span>
         <div class="flex-grow border-t border-white/10"></div>
       </div>
       <div class="flex gap-3">
@@ -966,33 +1030,33 @@
     </div>
   </div>
 
-  <div id="screen-lobby" class="hidden flex flex-col items-center min-h-screen p-4 md:p-6 pb-24 transition-opacity duration-400 opacity-0">
+  <div id="screen-lobby" class="hidden flex flex-col items-center p-4 md:p-6 pb-24 transition-opacity duration-400 opacity-0" style="height:100dvh;overflow-y:auto;overflow-x:hidden">
     <div class="w-full max-w-5xl flex justify-between items-center gap-4 mb-6 md:mb-8 mt-2 md:mt-4">
       <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text text-center font-display">Mamie Moule Maki</h1>
       <div class="bg-darkCard px-3 md:px-5 py-2 rounded-xl flex items-center gap-2 md:gap-3">
-        <span class="text-gray-400 font-semibold text-xs md:text-sm uppercase hidden sm:inline">Code Salon :</span>
+        <span class="text-gray-400 font-semibold text-xs md:text-sm uppercase hidden sm:inline font-display">Code Salon :</span>
         <span id="displayCode" class="text-white font-black text-lg md:text-xl tracking-widest font-display"></span>
         <button id="btnCopyCode" class="bg-white/10 hover:bg-white/20 p-2 rounded-lg text-sm transition-all active:scale-95" title="Copier le code">📋</button>
       </div>
     </div>
     
     <div id="hostSettings" class="hidden w-full max-w-5xl bg-darkCard p-6 md:p-8 rounded-3xl mb-6">
-      <h3 class="font-black text-white text-xs md:text-sm uppercase tracking-widest mb-6">⚙️ Paramètres du Show</h3>
+      <h3 class="font-black text-white text-xs md:text-sm uppercase tracking-widest mb-6 font-display">⚙️ Paramètres du Show</h3>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
         <div>
-          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Nombre Manches</label>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1 font-display">Nombre Manches</label>
           <select id="settingRounds" class="w-full p-4 outline-none text-sm md:text-base font-bold"><option value="1">1 Manche</option><option value="2">2 Manches</option><option value="3" selected>3 Manches</option><option value="5">5 Manches</option></select>
         </div>
         <div>
-          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Chrono</label>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1 font-display">Chrono</label>
           <select id="settingTimer" class="w-full p-4 outline-none text-sm md:text-base font-bold"><option value="sprint">Sprint (1er Fini)</option><option value="45">45 Secondes</option><option value="60" selected>60 Secondes</option><option value="90">90 Secondes</option><option value="120">120 Secondes</option></select>
         </div>
         <div>
-          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Questions / Manche</label>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1 font-display">Questions / Manche</label>
           <select id="settingQuestions" class="w-full p-4 outline-none text-sm md:text-base font-bold"><option value="3">3 Questions</option><option value="4">4 Questions</option><option value="5">5 Questions</option><option value="6" selected>6 Questions</option><option value="7">7 Questions</option><option value="8">8 Questions</option></select>
         </div>
         <div>
-          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1">Niveau</label>
+          <label class="block text-[10px] md:text-xs font-bold text-gray-400 uppercase mb-2 ml-1 font-display">Niveau</label>
           <select id="settingDiff" class="w-full p-4 outline-none text-sm md:text-base font-bold"><option value="soft">Soft (Gentil)</option><option value="moyen" selected>Moyen (Classique)</option><option value="hard">Hard (HOT / Epicé)</option></select>
         </div>
       </div>
@@ -1000,66 +1064,68 @@
 
     <div class="bg-darkCard p-5 md:p-6 rounded-3xl w-full max-w-5xl mb-8">
       <div class="flex justify-between items-center mb-6 border-b border-white/5 pb-4">
-        <h3 class="font-bold text-xs md:text-sm uppercase tracking-widest text-gray-400">Joueurs Connectés</h3>
+        <h3 class="font-bold text-xs md:text-sm uppercase tracking-widest text-gray-400 font-display">Joueurs Connectés</h3>
         <span class="bg-white/10 text-white text-xs font-bold px-4 py-1.5 rounded-full"><span id="playerCount">0</span> Joueurs</span>
       </div>
       <ul id="playersList" class="space-y-3 font-semibold text-base md:text-lg grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-2"></ul>
     </div>
     
-    <button id="btnStart" class="hidden bg-gradient-to-r text-white font-black py-5 px-12 md:px-16 rounded-2xl transition-all text-lg md:text-xl uppercase tracking-widest w-full md:w-auto shadow-2xl">
+    <button id="btnStart" class="hidden bg-gradient-to-r text-white font-black py-5 px-12 md:px-16 rounded-2xl transition-all text-lg md:text-xl uppercase tracking-widest w-full md:w-auto shadow-2xl font-display">
       Démarrer la partie
     </button>
     <div id="waitMessage" class="flex flex-col items-center gap-4">
       <div class="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-      <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest text-center">En attente du chef...</p>
+      <p class="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest text-center font-display">En attente du chef...</p>
     </div>
 
-    <button id="btnLeave" class="fixed bottom-12 right-6 md:bottom-8 md:right-8 z-50 bg-white/5 text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl font-black text-sm md:text-base uppercase tracking-widest flex items-center shadow-lg" title="Quitter le salon">
+    <button id="btnLeave" class="fixed bottom-12 right-6 md:bottom-8 md:right-8 z-50 bg-white/5 text-white px-6 py-3 md:px-8 md:py-4 rounded-2xl font-black text-sm md:text-base uppercase tracking-widest flex items-center shadow-lg font-display" title="Quitter le salon">
       Quitter
     </button>
   </div>
 
-  <div id="screen-letter-draw" class="hidden flex flex-col items-center justify-center min-h-screen p-6 transition-opacity duration-400 opacity-0">
+  <div id="screen-letter-draw" class="hidden flex flex-col items-center justify-center p-6 transition-opacity duration-400 opacity-0" style="height:100dvh;overflow:hidden">
     <div class="text-center mb-10">
       <span id="roundIndicator" class="text-white font-bold text-lg md:text-xl uppercase tracking-widest mb-2 block font-display"></span>
       <h2 class="text-4xl md:text-6xl font-black text-white mb-6 animate-pulse font-display">Tirage en cours</h2>
-      <p id="waitLetterMessage" class="text-xs md:text-sm text-gray-400 font-bold uppercase tracking-widest hidden">En attente du chef...</p>
+      <p id="waitLetterMessage" class="text-xs md:text-sm text-gray-400 font-bold uppercase tracking-widest hidden font-display">En attente du chef...</p>
     </div>
     <div class="w-40 h-40 md:w-56 md:h-56 rounded-full border-4 border-white/20 flex items-center justify-center bg-darkCard mb-16 shadow-2xl">
       <span id="rollingLetter" class="text-7xl md:text-9xl font-black text-white transition-colors duration-300 font-display">A</span>
     </div>
-    <button id="btnStopLetter" class="hidden btn-solid-white py-5 px-16 uppercase tracking-widest text-2xl shadow-2xl">
+    <button id="btnStopLetter" class="hidden btn-solid-white py-5 px-16 uppercase tracking-widest text-2xl shadow-2xl font-display">
       Arrêter !
     </button>
   </div>
 
-  <div id="screen-game" class="hidden flex flex-col items-center min-h-screen p-3 md:p-8 pb-24 transition-opacity duration-400 opacity-0">
-    <div class="w-full max-w-4xl flex justify-between items-center bg-darkCard p-5 md:p-10 rounded-[2rem] mb-6 md:mb-12 relative overflow-hidden shadow-2xl border border-white/10">
+  <div id="screen-game" class="hidden flex flex-col p-3 md:p-8 gap-3 md:gap-6 transition-opacity duration-400 opacity-0" style="height:100dvh;overflow:hidden">
+    <div class="w-full max-w-4xl mx-auto flex justify-between items-center bg-darkCard p-4 md:p-10 rounded-[1.5rem] md:rounded-[2rem] relative overflow-hidden shadow-2xl border border-white/10 flex-shrink-0">
       <div class="text-center relative z-10">
-        <div class="text-[10px] md:text-xs text-white font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80">La Lettre</div>
-        <div class="w-16 h-16 md:w-24 md:h-24 rounded-full border-2 border-white/20 flex items-center justify-center bg-white/5 shadow-lg">
-          <span id="gameLetter" class="text-4xl md:text-6xl font-black text-white uppercase font-display"></span>
+        <div class="text-[10px] md:text-xs text-white font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80 font-display">La Lettre</div>
+        <div class="w-14 h-14 md:w-24 md:h-24 rounded-full border-2 border-white/20 flex items-center justify-center bg-white/5 shadow-lg">
+          <span id="gameLetter" class="text-3xl md:text-6xl font-black text-white uppercase font-display"></span>
         </div>
       </div>
       
       <div class="flex-1 text-center relative z-10 px-2 sm:px-4">
-        <h2 class="text-[13px] sm:text-xl md:text-3xl font-black text-white tracking-widest uppercase leading-tight font-display">À vous de jouer !</h2>
-        <p class="text-[9px] sm:text-[10px] md:text-base font-bold text-gray-500 mt-1">Trouvez des mots originaux</p>
+        <h2 class="text-sm sm:text-xl md:text-3xl font-black text-white tracking-widest uppercase leading-tight font-display">À vous de jouer !</h2>
+        <p class="text-[10px] sm:text-xs md:text-base font-bold text-gray-500 mt-1 font-display">Trouvez des mots originaux</p>
       </div>
 
       <div class="text-center relative z-10">
-        <div id="timerTitle" class="text-[10px] md:text-xs text-white font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80">Temps Restant</div>
-        <div class="flex items-baseline justify-center bg-black/40 px-5 py-3 md:px-8 md:py-4 rounded-2xl border border-white/10 shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]">
-          <span id="gameTimer" class="text-4xl md:text-6xl font-black text-white font-display tracking-tighter transition-colors duration-300">60</span>
-          <span id="gameTimerSec" class="text-lg md:text-2xl font-bold text-gray-500 ml-1 font-display">s</span>
+        <div id="timerTitle" class="text-[10px] md:text-xs text-white font-black uppercase tracking-widest mb-1 md:mb-2 opacity-80 font-display">Temps Restant</div>
+        <div class="flex items-baseline justify-center bg-black/40 px-4 py-2 md:px-8 md:py-4 rounded-2xl border border-white/10 shadow-[inset_0_4px_10px_rgba(0,0,0,0.6)]">
+          <span id="gameTimer" class="text-3xl md:text-6xl font-black text-white font-display tracking-tighter transition-colors duration-300">60</span>
+          <span id="gameTimerSec" class="text-base md:text-2xl font-bold text-gray-500 ml-1 font-display">s</span>
         </div>
       </div>
     </div>
 
-    <div id="questionsContainer" class="w-full max-w-4xl space-y-4 md:space-y-6"></div>
+    <div id="questionsContainer" class="w-full max-w-4xl mx-auto flex-1 overflow-y-auto space-y-3 md:space-y-6" style="overflow-x:hidden;scroll-padding-bottom:8px"></div>
+
+    <div id="game-footer" class="w-full max-w-4xl mx-auto flex-shrink-0" style="padding-bottom:max(8px,env(safe-area-inset-bottom))"></div>
   </div>
 
-  <div id="screen-validating" class="hidden flex-1 relative w-full h-full transition-opacity duration-400 opacity-0"></div>
+  <div id="screen-validating" class="hidden flex-1 relative w-full transition-opacity duration-400 opacity-0" style="height:100dvh;overflow-y:auto;overflow-x:hidden"></div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -1591,6 +1657,7 @@
       "Pour exciter un prof de français, il suffit de lui parler de..."
     ];
     
+    
     onValue(ref(rtdb, ".info/serverTimeOffset"), (snap) => {
         serverOffset = snap.val() || 0;
     });
@@ -1620,6 +1687,27 @@
       settingsOverlay.querySelector('.settings-modal').classList.remove('scale-100');
     };
     closeSettings.addEventListener('click', closeSettingsModal);
+
+    // --- LOGIQUE NOUVELLE MODALE RÈGLES ---
+    const rulesOverlay = document.getElementById('rules-modal-overlay');
+    const btnRulesInsideSettings = document.getElementById('btnRulesInsideSettings');
+    const closeRulesBtn = document.getElementById('close-rules');
+
+    btnRulesInsideSettings.addEventListener('click', () => {
+      closeSettingsModal();
+      setTimeout(() => {
+        rulesOverlay.classList.add('opacity-100', 'pointer-events-auto');
+        rulesOverlay.classList.remove('opacity-0');
+        rulesOverlay.querySelector('.rules-modal').classList.add('scale-100');
+      }, 200);
+    });
+
+    closeRulesBtn.addEventListener('click', () => {
+      rulesOverlay.classList.remove('opacity-100', 'pointer-events-auto');
+      rulesOverlay.classList.add('opacity-0');
+      rulesOverlay.querySelector('.rules-modal').classList.remove('scale-100');
+    });
+    // -------------------------------------
 
     // Initialisation Theme Sombre/Clair
     const savedTheme = localStorage.getItem('mamieTheme') || 'dark';
@@ -1701,13 +1789,13 @@
         const el = document.getElementById(id);
         if (id === screenId) {
           el.classList.remove('hidden');
+          el.scrollTop = 0;
           setTimeout(() => { el.classList.remove('opacity-0'); el.classList.add('opacity-100'); }, 10);
         } else {
           el.classList.remove('opacity-100'); el.classList.add('opacity-0');
           setTimeout(() => { if (id !== screenId) el.classList.add('hidden'); }, 400);
         }
       });
-      window.scrollTo(0,0);
     };
 
     const normalizeWord = (word) => { if(!word) return ""; return word.trim().toLowerCase().replace(/\s+/g, ' '); };
@@ -2023,7 +2111,7 @@
         isHost = (data.hostId === myPlayerId);
         
         if (data.status === "lobby") {
-          window.isStoppingAnimation = false; window.hasSubmitted = false; document.getElementById('questionsContainer').innerHTML = "";
+          window.isStoppingAnimation = false; window.hasSubmitted = false; document.getElementById('questionsContainer').innerHTML = ""; document.getElementById('game-footer').innerHTML = "";
           showScreen('screen-lobby'); document.getElementById('displayCode').innerText = currentGameId;
 
           if (isHost) {
@@ -2060,7 +2148,7 @@
         }
 
         if (data.status === "drawing_letter") {
-          window.isStoppingAnimation = false; window.hasSubmitted = false; document.getElementById('questionsContainer').innerHTML = "";
+          window.isStoppingAnimation = false; window.hasSubmitted = false; document.getElementById('questionsContainer').innerHTML = ""; document.getElementById('game-footer').innerHTML = "";
           showScreen('screen-letter-draw'); document.getElementById('roundIndicator').innerText = `Manche ${data.currentRound} / ${data.settings.roundsCount}`;
           document.getElementById('rollingLetter').classList.remove('text-neonGreen'); document.getElementById('rollingLetter').classList.add('text-white');
           
@@ -2154,22 +2242,23 @@
             data.questions.forEach((q, index) => {
               const val = draft[index] || "";
               container.innerHTML += `
-                <div class="group relative bg-darkCard border border-white/5 p-4 md:p-6 rounded-[1.5rem] transition-all duration-300">
-                  <label class="flex items-center gap-3 px-1 pb-3 cursor-pointer relative z-10" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="flex items-center justify-center w-6 h-6 md:w-7 md:h-7 rounded-[8px] bg-white/10 text-white text-[10px] md:text-xs font-black border border-white/10 flex-shrink-0">${index+1}</span>
-                    <span class="text-gray-300 font-bold text-xs md:text-sm uppercase tracking-widest leading-snug">${escapeHTML(q)}</span>
+                <div class="group relative bg-darkCard border border-white/5 p-5 md:p-6 rounded-[1.5rem] transition-all duration-300">
+                  <label class="flex items-start gap-3 px-1 pb-3 cursor-pointer relative z-10" onclick="document.getElementById('answer-${index}').focus()">
+                    <span class="flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-[8px] bg-white/10 text-white text-xs md:text-sm font-black border border-white/10 flex-shrink-0 mt-0.5">${index+1}</span>
+                    <span class="text-gray-300 font-bold text-sm md:text-base uppercase tracking-wide leading-snug">${escapeHTML(q)}</span>
                   </label>
                   
-                  <div class="flex items-center bg-[#0a0c0f] px-3 py-3 md:px-5 md:py-4 rounded-[1rem] border border-black/80 focus-within:border-white/20 transition-colors cursor-text relative z-10" onclick="document.getElementById('answer-${index}').focus()">
-                    <span class="text-transparent bg-clip-text font-black text-lg md:text-2xl select-none uppercase pr-[1px] tracking-tight">${data.currentLetter}</span>
-                    <input type="text" id="answer-${index}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" value="${escapeHTML(val)}" class="w-full bg-transparent text-white outline-none font-black text-lg md:text-2xl placeholder-gray-600 shadow-none border-none p-0 pl-0 focus:shadow-none tracking-wide" placeholder="tape la suite...">
+                  <div class="flex items-center bg-[#0a0c0f] px-4 py-4 md:px-5 md:py-4 rounded-[1rem] border border-black/80 focus-within:border-white/20 transition-colors cursor-text relative z-10" onclick="document.getElementById('answer-${index}').focus()">
+                    <span class="text-transparent bg-clip-text font-black text-xl md:text-2xl select-none uppercase pr-[2px] tracking-tight">${data.currentLetter}</span>
+                    <input type="text" id="answer-${index}" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" value="${escapeHTML(val)}" class="w-full bg-transparent text-white outline-none font-black text-xl md:text-2xl placeholder-gray-600 shadow-none border-none p-0 pl-0 focus:shadow-none tracking-wide" placeholder="tape la suite...">
                   </div>
                 </div>
               `;
             });
             
             if (data.settings.timer === 'sprint') {
-              container.innerHTML += `<button id="btnSprint" onclick="window.endSprint()" disabled class="w-full mt-6 bg-gradient-to-r text-white font-black py-4 md:py-5 rounded-2xl transition-all text-xl md:text-2xl uppercase tracking-widest shadow-xl disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed">J'ai Fini ! 🛑</button>`;
+              const footer = document.getElementById('game-footer');
+              if (footer) footer.innerHTML = `<button id="btnSprint" onclick="window.endSprint()" disabled class="w-full bg-gradient-to-r text-white font-black py-5 md:py-5 rounded-2xl transition-all text-xl md:text-2xl uppercase tracking-widest shadow-xl disabled:opacity-40 disabled:grayscale disabled:cursor-not-allowed font-display">J'ai Fini ! 🛑</button>`;
             }
 
             setTimeout(() => {
@@ -2322,41 +2411,41 @@
         const canGoBack = !(flow.step === 'splash' || (flow.step === 'intro' && flow.qIndex === 0) || flow.step === 'leaderboard');
         if (['splash', 'intro', 'summary'].includes(flow.step) || canGoBack) {
            hostControls += `<div class="fixed bottom-4 md:bottom-8 left-0 w-full px-4 md:px-8 z-50 flex justify-between pointer-events-none ${animClass}">`;
-           if (canGoBack) hostControls += `<button onclick="window.prevFlow()" class="pointer-events-auto btn-solid-white py-3 px-6 text-sm md:text-lg">⬅️ Retour</button>`; else hostControls += `<div></div>`;
-           if (['splash', 'intro', 'summary'].includes(flow.step)) hostControls += `<button onclick="window.nextFlow()" class="pointer-events-auto btn-solid-white py-3 px-6 text-sm md:text-lg">Suivant ➔</button>`;
+           if (canGoBack) hostControls += `<button onclick="window.prevFlow()" class="pointer-events-auto btn-solid-white py-3 px-6 text-sm md:text-lg font-display">⬅️ Retour</button>`; else hostControls += `<div></div>`;
+           if (['splash', 'intro', 'summary'].includes(flow.step)) hostControls += `<button onclick="window.nextFlow()" class="pointer-events-auto btn-solid-white py-3 px-6 text-sm md:text-lg font-display">Suivant ➔</button>`;
            hostControls += `</div>`;
         }
-        if (flow.step === 'leaderboard' && !isFinalRound) hostControls += `<button onclick="window.nextRound()" class="fixed bottom-8 right-8 z-50 btn-solid-white py-4 px-8 text-lg md:text-xl uppercase tracking-widest ${animClass}">Manche Suivante ➔</button>`;
+        if (flow.step === 'leaderboard' && !isFinalRound) hostControls += `<button onclick="window.nextRound()" class="fixed bottom-8 right-8 z-50 btn-solid-white py-4 px-8 text-lg md:text-xl uppercase tracking-widest ${animClass} font-display">Manche Suivante ➔</button>`;
       } else {
-        if(flow.step !== 'leaderboard') hostControls += `<div class="fixed bottom-24 md:bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-white border border-white/20 font-black py-2 px-6 md:py-3 md:px-8 rounded-full flex items-center gap-3 whitespace-nowrap text-xs md:text-sm ${animClass}"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> En attente du chef...</div>`;
+        if(flow.step !== 'leaderboard') hostControls += `<div class="fixed bottom-24 md:bottom-20 left-1/2 transform -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md text-white border border-white/20 font-black py-2 px-6 md:py-3 md:px-8 rounded-full flex items-center gap-3 whitespace-nowrap text-xs md:text-sm ${animClass} font-display"><div class="w-3 h-3 md:w-4 md:h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></div> En attente du chef...</div>`;
       }
 
       if (flow.step === 'splash') {
           let sprintWinnerHtml = '';
           if (data.settings?.timer === 'sprint' && data.sprintWinner && data.players[data.sprintWinner]) {
-              sprintWinnerHtml = `<div class="mt-8 px-6 py-3 bg-white/10 rounded-2xl border border-white/20 shadow-lg sprint-pill animate-bounce"><span class="text-transparent bg-clip-text font-black uppercase tracking-widest text-lg md:text-xl sprint-text">⚡ Le plus rapide : ${escapeHTML(data.players[data.sprintWinner].name)}</span></div>`;
+              sprintWinnerHtml = `<div class="mt-8 px-6 py-3 bg-white/10 rounded-2xl border border-white/20 shadow-lg sprint-pill animate-bounce"><span class="text-transparent bg-clip-text font-black uppercase tracking-widest text-lg md:text-xl sprint-text font-display">⚡ Le plus rapide : ${escapeHTML(data.players[data.sprintWinner].name)}</span></div>`;
           }
-          html = `<div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center ${animClass}"><h1 class="text-5xl md:text-8xl font-black text-white drop-shadow-lg font-display">RÉSULTATS</h1><p class="text-lg md:text-2xl text-gray-400 mt-6 font-bold uppercase tracking-widest">L'heure de vérité</p>${sprintWinnerHtml}</div>`;
+          html = `<div class="absolute inset-0 flex flex-col items-center justify-center px-4 text-center ${animClass}"><h1 class="text-5xl md:text-8xl font-black text-white drop-shadow-lg font-display">RÉSULTATS</h1><p class="text-lg md:text-2xl text-gray-400 mt-6 font-bold uppercase tracking-widest font-display">L'heure de vérité</p>${sprintWinnerHtml}</div>`;
       }
-      else if (flow.step === 'intro') html = `<div class="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center ${animClass}"><span class="text-white font-bold text-base md:text-xl uppercase tracking-widest mb-4 md:mb-6 bg-white/10 px-5 py-2 rounded-xl border border-white/20 shadow-lg">Question ${flow.qIndex + 1}</span><h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-2xl font-display">${escapeHTML(data.questions[flow.qIndex])}</h2></div>`;
+      else if (flow.step === 'intro') html = `<div class="absolute inset-0 flex flex-col items-center justify-center p-4 md:p-6 text-center ${animClass}"><span class="text-white font-bold text-base md:text-xl uppercase tracking-widest mb-4 md:mb-6 bg-white/10 px-5 py-2 rounded-xl border border-white/20 shadow-lg font-display">Question ${flow.qIndex + 1}</span><h2 class="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight drop-shadow-2xl font-display">${escapeHTML(data.questions[flow.qIndex])}</h2></div>`;
       else if (flow.step === 'reveal') {
          const pId = orderedKeys[flow.pIndex]; if(!pId || !data.players[pId]) return;
          const ansObj = data.players[pId].answers?.[flow.qIndex] || { text: "", valid: true }; const hasAnswer = ansObj.text.trim() !== "";
          const displayAns = hasAnswer ? `<div class="text-6xl md:text-8xl leading-none flex items-baseline justify-center tracking-tight break-all"><span class="text-transparent bg-clip-text font-black uppercase font-display">${data.currentLetter}</span><span class="font-bold text-white -ml-1 md:-ml-2 font-display">${escapeHTML(ansObj.text)}</span></div>` : `<span class="italic text-gray-600 text-3xl md:text-4xl">Pas de réponse...</span>`;
          let controls = '';
          if (isHost) {
-           if (hasAnswer) controls = `<div class="flex gap-4 md:gap-8 mt-10 md:mt-16 flex-wrap justify-center"><button onclick="window.validateAnswer(event, '${pId}', true)" class="bg-green-500/20 text-green-400 border border-green-500/30 font-black py-4 px-10 md:py-6 md:px-14 rounded-3xl text-xl md:text-2xl uppercase transition-all shadow-lg hover:bg-green-500/30">Bon ✅</button><button onclick="window.validateAnswer(event, '${pId}', false)" class="bg-red-500/20 text-red-400 border border-red-500/30 font-black py-4 px-10 md:py-6 md:px-14 rounded-3xl text-xl md:text-2xl uppercase transition-all shadow-lg hover:bg-red-500/30">Mauvais ❌</button></div>`;
-           else controls = `<button onclick="window.nextFlow()" class="mt-10 md:mt-16 btn-solid-white py-4 px-12 md:py-5 md:px-16 uppercase tracking-widest text-lg md:text-2xl shadow-xl">Continuer ➔</button>`;
+           if (hasAnswer) controls = `<div class="flex gap-4 md:gap-8 mt-10 md:mt-16 flex-wrap justify-center"><button onclick="window.validateAnswer(event, '${pId}', true)" class="bg-green-500/20 text-green-400 border border-green-500/30 font-black py-4 px-10 md:py-6 md:px-14 rounded-3xl text-xl md:text-2xl uppercase transition-all shadow-lg hover:bg-green-500/30 font-display">Bon ✅</button><button onclick="window.validateAnswer(event, '${pId}', false)" class="bg-red-500/20 text-red-400 border border-red-500/30 font-black py-4 px-10 md:py-6 md:px-14 rounded-3xl text-xl md:text-2xl uppercase transition-all shadow-lg hover:bg-red-500/30 font-display">Mauvais ❌</button></div>`;
+           else controls = `<button onclick="window.nextFlow()" class="mt-10 md:mt-16 btn-solid-white py-4 px-12 md:py-5 md:px-16 uppercase tracking-widest text-lg md:text-2xl shadow-xl font-display">Continuer ➔</button>`;
          }
          
          html = `
             <div class="absolute inset-0 flex flex-col items-center pt-8 md:pt-12 ${animClass} overflow-y-auto pb-32">
               <div class="w-[90%] max-w-3xl text-center py-4 md:py-6 px-4 bg-darkCard border border-white/10 rounded-3xl shadow-2xl relative z-10">
-                <span class="text-white font-bold text-[10px] md:text-xs uppercase tracking-widest opacity-80">Question ${flow.qIndex + 1}</span>
+                <span class="text-white font-bold text-[10px] md:text-xs uppercase tracking-widest opacity-80 font-display">Question ${flow.qIndex + 1}</span>
                 <h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-2 px-2 font-display">${escapeHTML(data.questions[flow.qIndex])}</h3>
               </div>
               <div class="flex-1 flex flex-col items-center justify-center p-6 text-center w-full max-w-4xl mx-auto relative z-10">
-                <h4 class="text-lg md:text-2xl font-bold text-gray-500 mb-6 md:mb-8 uppercase tracking-widest">${escapeHTML(data.players[pId].name)} a écrit :</h4>
+                <h4 class="text-lg md:text-2xl font-bold text-gray-500 mb-6 md:mb-8 uppercase tracking-widest font-display">${escapeHTML(data.players[pId].name)} a écrit :</h4>
                 <div class="text-4xl md:text-6xl font-black text-white drop-shadow-xl flex flex-wrap items-center justify-center break-all w-full leading-tight">
                   ${displayAns}
                 </div>
@@ -2388,29 +2477,29 @@
           let answerContent = ansObj.text ? `<div class="flex items-baseline tracking-tight break-all mt-1 font-display"><span class="text-transparent bg-clip-text font-black uppercase text-3xl md:text-4xl">${data.currentLetter}</span><span class="${strike} font-bold text-white text-3xl md:text-4xl -ml-0.5 md:-ml-1">${escapeHTML(ansObj.text)}</span></div>` : '<span class="italic text-gray-600 text-xl md:text-2xl mt-1">Vide</span>';
           
           if (ansObj.linkedTo) {
-             answerContent += `<div class="text-[10px] md:text-xs text-transparent bg-clip-text font-bold mt-1">🔗 Relié à : ${escapeHTML(ansObj.linkedTo)}</div>`;
+             answerContent += `<div class="text-[10px] md:text-xs text-transparent bg-clip-text font-bold mt-1 font-display">🔗 Relié à : ${escapeHTML(ansObj.linkedTo)}</div>`;
           }
           
           let controls = "";
           if (isHost && ansObj.valid && ansObj.text !== "") {
             if (ansObj.linkedTo) {
-                controls = `<button onclick="window.undoMerge('${pId}')" class="px-3 py-1.5 bg-red-500/20 text-red-400 font-bold rounded-xl text-xs md:text-sm border border-red-500/30 shadow-md">Séparer ✂️</button>`; 
+                controls = `<button onclick="window.undoMerge('${pId}')" class="px-3 py-1.5 bg-red-500/20 text-red-400 font-bold rounded-xl text-xs md:text-sm border border-red-500/30 shadow-md font-display">Séparer ✂️</button>`; 
             } else {
                 if (mergeState !== null) { 
                    if (mergeState === pId) { 
                        rowClasses = "border-white/50 opacity-100 ring-2 ring-[rgba(var(--primary-rgb),0.5)]"; 
-                       controls = `<button onclick="window.cancelMerge()" class="px-4 py-1.5 bg-green-500/20 text-green-400 font-bold rounded-xl text-xs md:text-sm border border-green-500/30 shadow-md">Terminer ✅</button>`; 
+                       controls = `<button onclick="window.cancelMerge()" class="px-4 py-1.5 bg-green-500/20 text-green-400 font-bold rounded-xl text-xs md:text-sm border border-green-500/30 shadow-md font-display">Terminer ✅</button>`; 
                    } else { 
-                       controls = `<button onclick="window.executeMerge('${pId}', '${mergeState}')" class="px-4 py-1.5 bg-white/20 text-white font-bold rounded-xl text-xs md:text-sm border border-white/30 shadow-md hover:bg-white/30 transition-colors">Lier ici 👈</button>`; 
+                       controls = `<button onclick="window.executeMerge('${pId}', '${mergeState}')" class="px-4 py-1.5 bg-white/20 text-white font-bold rounded-xl text-xs md:text-sm border border-white/30 shadow-md hover:bg-white/30 transition-colors font-display">Lier ici 👈</button>`; 
                    } 
                 } else { 
-                   controls = `<button onclick="window.startMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/10 text-white rounded-xl text-base md:text-lg shadow-md border border-white/20 hover:bg-white/20 transition-colors">🔗</button>`; 
+                   controls = `<button onclick="window.startMerge('${pId}')" class="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-white/10 text-white rounded-xl text-base md:text-lg shadow-md border border-white/20 hover:bg-white/20 transition-colors font-display">🔗</button>`; 
                 }
             }
           }
-          listHtml += `<div class="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 rounded-2xl border transition-all gap-3 md:gap-0 ${rowClasses} relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none"></div><div class="flex flex-col w-full md:w-2/3 relative z-10"><span class="font-bold text-gray-500 text-[10px] md:text-xs uppercase tracking-widest mb-1">${escapeHTML(data.players[pId].name)}</span><div class="text-base md:text-xl leading-snug">${answerContent}</div></div><div class="flex items-center gap-3 self-end md:self-auto relative z-10">${(!mergeState && ansObj.valid && ansObj.text) ? `<span class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-xl border border-white/10 font-black text-sm md:text-base ${scoreBadge}">+${score}</span>` : ''}${controls}</div></div>`;
+          listHtml += `<div class="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 rounded-2xl border transition-all gap-3 md:gap-0 ${rowClasses} relative overflow-hidden"><div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent pointer-events-none"></div><div class="flex flex-col w-full md:w-2/3 relative z-10"><span class="font-bold text-gray-500 text-[10px] md:text-xs uppercase tracking-widest mb-1 font-display">${escapeHTML(data.players[pId].name)}</span><div class="text-base md:text-xl leading-snug">${answerContent}</div></div><div class="flex items-center gap-3 self-end md:self-auto relative z-10">${(!mergeState && ansObj.valid && ansObj.text) ? `<span class="flex items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-xl border border-white/10 font-black text-sm md:text-base ${scoreBadge} font-display">+${score}</span>` : ''}${controls}</div></div>`;
         });
-        html = `<div class="absolute inset-0 flex flex-col p-4 md:p-10 overflow-y-auto pb-40 ${animClass} relative overflow-hidden"><div class="w-full max-w-4xl mx-auto mt-4 md:mt-12 relative z-10"><div class="text-center mb-6 md:mb-10"><span class="text-white font-bold text-xs md:text-sm uppercase tracking-widest opacity-80">Bilan Question ${flow.qIndex + 1}</span><h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-3 px-2 drop-shadow-md font-display">${escapeHTML(data.questions[flow.qIndex])} ${mergeState !== null ? '<span class="text-white block text-sm md:text-base mt-3 animate-pulse">Sélectionne les joueurs ayant eu la même idée...</span>' : ''}</h3></div><div class="space-y-3 bg-darkCard p-4 md:p-6 border border-white/10 rounded-3xl shadow-2xl">${listHtml}</div></div></div>`;
+        html = `<div class="absolute inset-0 flex flex-col p-4 md:p-10 overflow-y-auto pb-40 ${animClass} relative overflow-hidden"><div class="w-full max-w-4xl mx-auto mt-4 md:mt-12 relative z-10"><div class="text-center mb-6 md:mb-10"><span class="text-white font-bold text-xs md:text-sm uppercase tracking-widest opacity-80 font-display">Bilan Question ${flow.qIndex + 1}</span><h3 class="text-xl md:text-3xl font-black text-white mt-1 md:mt-3 px-2 drop-shadow-md font-display">${escapeHTML(data.questions[flow.qIndex])} ${mergeState !== null ? '<span class="text-white block text-sm md:text-base mt-3 animate-pulse font-display">Sélectionne les joueurs ayant eu la même idée...</span>' : ''}</h3></div><div class="space-y-3 bg-darkCard p-4 md:p-6 border border-white/10 rounded-3xl shadow-2xl">${listHtml}</div></div></div>`;
       }
       else if (flow.step === 'leaderboard') {
         const displayScores = {}; orderedKeys.forEach(k => displayScores[k] = data.players[k].score || 0);
@@ -2419,13 +2508,13 @@
         sorted.forEach((pId, idx) => { if (displayScores[pId] !== pScore) { cRank = idx + 1; pScore = displayScores[pId]; } playerRanks[pId] = cRank; });
 
         if (!isFinalRound) {
-          let lbHtml = ''; sorted.forEach((pId, idx) => { const isFirst = playerRanks[pId] === 1; lbHtml += `<div class="flex items-center justify-between p-4 md:p-5 bg-black/40 rounded-2xl border ${isFirst ? 'border-white/30 bg-white/5' : 'border-white/5'} shadow-sm"><div class="flex items-center gap-3 md:gap-4 truncate"><span class="text-2xl md:text-3xl font-black ${isFirst ? 'text-white' : 'text-gray-600'} font-display">#${playerRanks[pId]}</span><span class="text-lg md:text-xl font-bold text-white truncate">${escapeHTML(data.players[pId].name)}</span></div><span class="text-xl md:text-2xl font-black text-neonGreen whitespace-nowrap ml-4">${displayScores[pId]} pts</span></div>`; });
-          html = `<div class="absolute inset-0 flex flex-col items-center p-4 md:p-8 overflow-y-auto pb-32 ${animClass} relative overflow-hidden"><span class="text-white font-bold text-xs md:text-base uppercase tracking-widest mt-8 md:mt-12 opacity-80">Classement Manche ${data.currentRound} / ${data.settings.roundsCount}</span><h2 class="text-3xl md:text-5xl font-black text-white mb-8 md:mb-12 mt-2 text-center drop-shadow-md font-display">Scores Globaux</h2><div class="w-full max-w-2xl space-y-3 bg-darkCard border border-white/10 p-5 md:p-8 rounded-3xl shadow-2xl">${lbHtml}</div></div>`;
+          let lbHtml = ''; sorted.forEach((pId, idx) => { const isFirst = playerRanks[pId] === 1; lbHtml += `<div class="flex items-center justify-between p-4 md:p-5 bg-black/40 rounded-2xl border ${isFirst ? 'border-white/30 bg-white/5' : 'border-white/5'} shadow-sm"><div class="flex items-center gap-3 md:gap-4 truncate"><span class="text-2xl md:text-3xl font-black ${isFirst ? 'text-white' : 'text-gray-600'} font-display">#${playerRanks[pId]}</span><span class="text-lg md:text-xl font-bold text-white truncate">${escapeHTML(data.players[pId].name)}</span></div><span class="text-xl md:text-2xl font-black text-neonGreen whitespace-nowrap ml-4 font-display">${displayScores[pId]} pts</span></div>`; });
+          html = `<div class="absolute inset-0 flex flex-col items-center p-4 md:p-8 overflow-y-auto pb-32 ${animClass} relative overflow-hidden"><span class="text-white font-bold text-xs md:text-base uppercase tracking-widest mt-8 md:mt-12 opacity-80 font-display">Classement Manche ${data.currentRound} / ${data.settings.roundsCount}</span><h2 class="text-3xl md:text-5xl font-black text-white mb-8 md:mb-12 mt-2 text-center drop-shadow-md font-display">Scores Globaux</h2><div class="w-full max-w-2xl space-y-3 bg-darkCard border border-white/10 p-5 md:p-8 rounded-3xl shadow-2xl">${lbHtml}</div></div>`;
         } else {
           const numPlayers = sorted.length; const p1 = sorted[0]; const p2 = numPlayers >= 2 ? sorted[1] : null; const p3 = numPlayers >= 3 ? sorted[2] : null; const others = sorted.slice(3);
-          let otherPlayersHtml = ''; others.forEach(pId => { otherPlayersHtml += `<div class="flex items-center justify-between p-3.5 bg-white/5 rounded-xl border border-white/5"><div class="flex items-center gap-3 truncate"><span class="text-lg font-black text-gray-600 font-display">#${playerRanks[pId]}</span><span class="text-base font-bold text-gray-300 truncate">${escapeHTML(data.players[pId].name)}</span></div><span class="text-base font-black text-neonGreen">${displayScores[pId]} pts</span></div>`; });
+          let otherPlayersHtml = ''; others.forEach(pId => { otherPlayersHtml += `<div class="flex items-center justify-between p-3.5 bg-white/5 rounded-xl border border-white/5"><div class="flex items-center gap-3 truncate"><span class="text-lg font-black text-gray-600 font-display">#${playerRanks[pId]}</span><span class="text-base font-bold text-gray-300 truncate">${escapeHTML(data.players[pId].name)}</span></div><span class="text-base font-black text-neonGreen font-display">${displayScores[pId]} pts</span></div>`; });
           const winnerWidth = numPlayers === 1 ? 'w-2/3 md:w-1/2' : (numPlayers === 2 ? 'w-1/2' : 'w-1/3'); const p2Width = numPlayers === 2 ? 'w-1/2' : 'w-1/3'; const p3Width = 'w-1/3'; 
-          html = `<div class="absolute inset-0 flex flex-col items-center p-6 md:p-10 overflow-y-auto pb-40 overflow-x-hidden ${animClass} relative overflow-hidden"><h2 class="text-4xl md:text-6xl font-black text-white mb-10 md:mb-16 mt-6 md:mt-10 text-center drop-shadow-md font-display">PODIUM FINAL</h2><div class="flex items-end justify-center gap-2 md:gap-5 w-full max-w-4xl mt-6 md:mt-12 z-10">${p2 ? `<div class="${p2Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-300 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p2].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2">${displayScores[p2]} pts</span><div class="bg-gray-400 w-full h-32 md:h-40 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/20 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md font-display">#${playerRanks[p2]}</span></div></div>` : ''}${p1 ? `<div class="${winnerWidth} flex flex-col items-center z-10"><span class="text-base md:text-2xl font-black text-white truncate w-full text-center px-2 mb-1">${escapeHTML(data.players[p1].name)}</span><span class="text-sm md:text-base font-black text-neonGreen mb-3">${displayScores[p1]} pts</span><div class="flex flex-col items-center w-full"><span class="text-6xl md:text-7xl -mb-3 relative z-20 drop-shadow-lg">👑</span><div class="bg-gradient-to-t w-full h-40 md:h-56 rounded-t-2xl flex justify-center pt-8 md:pt-10 relative z-10 border-t border-white/30 shadow-2xl"><span class="text-5xl md:text-7xl font-black text-white drop-shadow-lg font-display">#${playerRanks[p1]}</span></div></div></div>` : '<div class="w-full"></div>'}${p3 ? `<div class="${p3Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-400 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p3].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2">${displayScores[p3]} pts</span><div class="bg-orange-800 w-full h-24 md:h-32 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/15 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md font-display">#${playerRanks[p3]}</span></div></div>` : ''}</div><div class="w-full max-w-2xl mt-10 space-y-2.5 relative z-10">${otherPlayersHtml}</div>${isHost ? `<button onclick="window.backToLobby()" class="mt-16 btn-solid-white py-5 px-16 text-xl md:text-2xl uppercase tracking-widest shadow-2xl relative z-10">Retour au Salon</button>` : ''}${!isHost ? `<p class="mt-16 text-gray-500 font-bold uppercase tracking-widest text-lg relative z-10">En attente du chef...</p>` : ''}</div>`;
+          html = `<div class="absolute inset-0 flex flex-col items-center p-6 md:p-10 overflow-y-auto pb-40 overflow-x-hidden ${animClass} relative overflow-hidden"><h2 class="text-4xl md:text-6xl font-black text-white mb-10 md:mb-16 mt-6 md:mt-10 text-center drop-shadow-md font-display">PODIUM FINAL</h2><div class="flex items-end justify-center gap-2 md:gap-5 w-full max-w-4xl mt-6 md:mt-12 z-10">${p2 ? `<div class="${p2Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-300 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p2].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2 font-display">${displayScores[p2]} pts</span><div class="bg-gray-400 w-full h-32 md:h-40 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/20 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md font-display">#${playerRanks[p2]}</span></div></div>` : ''}${p1 ? `<div class="${winnerWidth} flex flex-col items-center z-10"><span class="text-base md:text-2xl font-black text-white truncate w-full text-center px-2 mb-1">${escapeHTML(data.players[p1].name)}</span><span class="text-sm md:text-base font-black text-neonGreen mb-3 font-display">${displayScores[p1]} pts</span><div class="flex flex-col items-center w-full"><span class="text-6xl md:text-7xl -mb-3 relative z-20 drop-shadow-lg">👑</span><div class="bg-gradient-to-t w-full h-40 md:h-56 rounded-t-2xl flex justify-center pt-8 md:pt-10 relative z-10 border-t border-white/30 shadow-2xl"><span class="text-5xl md:text-7xl font-black text-white drop-shadow-lg font-display">#${playerRanks[p1]}</span></div></div></div>` : '<div class="w-full"></div>'}${p3 ? `<div class="${p3Width} flex flex-col items-center"><span class="text-sm md:text-lg font-bold text-gray-400 podium-name truncate w-full text-center px-2">${escapeHTML(data.players[p3].name)}</span><span class="text-xs md:text-sm font-black text-neonGreen mb-2 font-display">${displayScores[p3]} pts</span><div class="bg-orange-800 w-full h-24 md:h-32 rounded-t-2xl flex justify-center pt-3 md:pt-5 border-t border-white/15 shadow-2xl"><span class="text-3xl md:text-5xl font-black text-white drop-shadow-md font-display">#${playerRanks[p3]}</span></div></div>` : ''}</div><div class="w-full max-w-2xl mt-10 space-y-2.5 relative z-10">${otherPlayersHtml}</div>${isHost ? `<button onclick="window.backToLobby()" class="mt-16 btn-solid-white py-5 px-16 text-xl md:text-2xl uppercase tracking-widest shadow-2xl relative z-10 font-display">Retour au Salon</button>` : ''}${!isHost ? `<p class="mt-16 text-gray-500 font-bold uppercase tracking-widest text-lg relative z-10 font-display">En attente du chef...</p>` : ''}</div>`;
         }
       }
 
